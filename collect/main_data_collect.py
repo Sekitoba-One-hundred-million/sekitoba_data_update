@@ -11,7 +11,7 @@ def num_check( num ):
     else:
         return num
 
-def horse_data_collect( url ):
+def horce_data_collect( url ):
     horce_data = []
 
     r, _ = lib.request( url )
@@ -109,7 +109,7 @@ def main():
         horce_url_list.append( update_horce_url[k] )
 
     horce_data_storage = dm.pickle_load( "horce_data_storage.pickle", prod = True )
-    add_horce_data = lib.thread_scraping( horce_url_list, horce_id_list ).data_get( race_data_search )
+    add_horce_data = lib.thread_scraping( horce_url_list, horce_id_list ).data_get( horce_data_collect )
 
     for k in add_horce_data.keys():
         horce_data_storage[k] = add_horce_data[k]
