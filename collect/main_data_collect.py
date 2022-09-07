@@ -95,7 +95,7 @@ def main():
             continue
 
         race_data_storage[k] = add_race_data[k]
-        need_update_race_id_list.append( lib.dic_append( k ) )
+        need_update_race_id_list.append( lib.id_get( k ) )
 
         for horce_id in add_race_data[k].keys():
             update_horce_url[horce_id] = "https://db.netkeiba.com/horse/" + horce_id
