@@ -91,3 +91,6 @@ def main():
         jockey_data[k] = add_data[k]
 
     dm.pickle_upload( "prod_jockey_data.pickle", prod = True )
+
+if __name__ == "__main__":
+    main()
