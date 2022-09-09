@@ -13,6 +13,12 @@ python collect/train_data_collect.py
 echo start collect/wrap_data_collect.py
 python collect/wrap_data_collect.py
 
+echo start collect/jockey_id_collect.py
+python collect/jockey_id_collect.py
+
+echo start collect/jockey_year_rank_collect.py
+python collect/jockey_year_rank_collect.py
+
 echo start create/race_rank.py
 python create/race_rank.py
 
