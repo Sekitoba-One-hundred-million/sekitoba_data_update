@@ -90,7 +90,7 @@ def main():
     for k in add_data.keys():
         jockey_data[k] = add_data[k]
 
-    dm.pickle_upload( "prod_jockey_data.pickle", prod = True )
+    dm.pickle_upload( "prod_jockey_data.pickle", jockey_data, prod = True )
 
 if __name__ == "__main__":
     main()
