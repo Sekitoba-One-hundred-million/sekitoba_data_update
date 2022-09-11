@@ -22,6 +22,12 @@ python collect/jockey_year_rank_collect.py
 echo \nstart collect/jockey_data_collect.py
 python collect/jockey_data_collect.py
 
+echo \nstart collect/trainer_id_collect.py
+python collect/trainer_id_collect.py
+
+echo \nstart collect/trainer_data_collect.py
+python collect/trainer_data_collect.py
+
 echo \nstart create/race_rank.py
 python create/race_rank.py
 

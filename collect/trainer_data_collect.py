@@ -2,10 +2,11 @@ import datetime
 from bs4 import BeautifulSoup
 
 import sekitoba_library as lib
-import sekitoba_data_manage as dm
+from sekitoba_logger import logger
+from data_manage.storage import Storage
 
-def joceky_data_collect( jockey_id ):
-    base_url = "https://db.netkeiba.com/?pid=jockey_detail&id=" + jockey_id + "&page="
+def trainer_data_collect( trainer_id ):
+    base_url = "https://db.netkeiba.com/?pid=trainer_detail&id=" + trainer_id + "&page="
     result = {}
     count = 1
     before_year = int( datetime.date.today().year ) - 1
@@ -15,14 +16,13 @@ def joceky_data_collect( jockey_id ):
         r,_  = lib.request( url )
         soup = BeautifulSoup( r.content, "html.parser" )
         tbody = soup.find( "tbody" )
-        
         if tbody == None:
             break
         
         tr_tag = tbody.findAll( "tr" )
 
         if len( tr_tag ) == 0:
-            break        
+            break
         else:
             for tr in tr_tag:
                 td_tag = tr.findAll( "td" )
@@ -56,39 +56,38 @@ def joceky_data_collect( jockey_id ):
                 result[key_day][key_race_num]["popular"] = td_tag[10].text
                 result[key_day][key_race_num]["rank"] = td_tag[11].text
                 result[key_day][key_race_num]["horce_id"] = horce_id
-                result[key_day][key_race_num]["weight"] = td_tag[13].text
-                result[key_day][key_race_num]["dist"] = td_tag[14].text
-                result[key_day][key_race_num]["baba"] = td_tag[15].text
-                result[key_day][key_race_num]["time"] = td_tag[16].text
-                result[key_day][key_race_num]["diff"] = td_tag[17].text
-                result[key_day][key_race_num]["passing"] = td_tag[18].text
-                result[key_day][key_race_num]["pace"] = td_tag[19].text
-                result[key_day][key_race_num]["up"] = td_tag[20].text
+                result[key_day][key_race_num]["weight"] = td_tag[14].text
+                result[key_day][key_race_num]["dist"] = td_tag[15].text
+                result[key_day][key_race_num]["baba"] = td_tag[16].text
+                result[key_day][key_race_num]["time"] = td_tag[17].text
+                result[key_day][key_race_num]["diff"] = td_tag[18].text
+                result[key_day][key_race_num]["passing"] = td_tag[19].text
+                result[key_day][key_race_num]["pace"] = td_tag[20].text
+                result[key_day][key_race_num]["up"] = td_tag[21].text
                 
         count += 1
     
     return result
 
 def main():
-    jockey_data = dm.pickle_load( "prod_jockey_data.pickle", prod = True )
+    trainer_data = dm.pickle_load( "prod_trainer_data.pickle", prod = True )
 
-    if jockey_data == None:
-        jockey_data = {}
+    if trainer_data == None:
+        trainer_data = {}
     
     key_list = []
-    base_url = "https://db.netkeiba.com/?pid=jockey_detail&id="
-    jockey_id_data = dm.pickle_load( "jockey_id_data.pickle", prod = True )
+    url_list = []
+    base_url = "https://db.netkeiba.com/?pid=trainer_detail&id="
+    trainer_id_data = dm.pickle_load( "trainer_id_data.pickle", prod = True )
     
-    for jockey_id in jockey_id_data.keys():
-        url = base_url + jockey_id
-        key_list.append( jockey_id )
+    for trainer_id in trainer_id_data.keys():
+        url = base_url + trainer_id
+        key_list.append( trainer_id )
+        url_list.append( url )
 
-    add_data = lib.thread_scraping( key_list, key_list ).data_get( joceky_data_collect )
+    add_data = lib.thread_scraping( url_list, key_list ).data_get( joceky_data_collect )
 
     for k in add_data.keys():
-        jockey_data[k] = add_data[k]
+        trainer_data[k] = add_data[k]
 
-    dm.pickle_upload( "prod_jockey_data.pickle", jockey_data, prod = True )
-
-if __name__ == "__main__":
-    main()
+    dm.pickle_upload( "prod_trainer_data.pickle", trainer_data, prod = True )
