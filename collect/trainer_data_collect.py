@@ -84,7 +84,7 @@ def main():
         key_list.append( trainer_id )
         url_list.append( url )
 
-    add_data = lib.thread_scraping( url_list, key_list ).data_get( joceky_data_collect )
+    add_data = lib.thread_scraping( url_list, key_list ).data_get( trainer_data_collect )
 
     for k in add_data.keys():
         trainer_data[k] = add_data[k]
