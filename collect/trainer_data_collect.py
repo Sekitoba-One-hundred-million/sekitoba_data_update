@@ -2,6 +2,7 @@ import datetime
 from bs4 import BeautifulSoup
 
 import sekitoba_library as lib
+import sekitoba_data_manage as dm
 
 def trainer_data_collect( trainer_id ):
     base_url = "https://db.netkeiba.com/?pid=trainer_detail&id=" + trainer_id + "&page="
