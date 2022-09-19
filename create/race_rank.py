@@ -1,4 +1,3 @@
-from name import *
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -7,11 +6,15 @@ def main():
 
     if result == None:
         result = {}
-    
-    race_id_list = dm.pickle_load( UPDATE_RACE_ID_LIST, prod = True )
+
+    prod_race_data = dm.pickle_load( "race_data.pickle", prod = True )
+    race_id_list = list( prod_race_data.keys() )        
     race_money_data = dm.pickle_load( "race_money_data.pickle", prod = True )
 
     for race_id in race_id_list:
+        if race_id in result:
+            continue
+        
         race_money = race_money_data[race_id]
         race_rank = 0
         

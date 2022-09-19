@@ -1,7 +1,6 @@
 import datetime
 from bs4 import BeautifulSoup
 
-from name import *
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -116,7 +115,5 @@ def main():
 
     dm.pickle_upload( "race_data.pickle", race_data_storage, prod = True )
     dm.pickle_upload( "horce_data_storage.pickle", horce_data_storage, prod = True )
-    dm.pickle_upload( UPDATE_RACE_ID_LIST, need_update_race_id_list, prod = True )
-    dm.pickle_upload( UPDATE_HORCE_ID_LIST, need_update_horce_id_list, prod = True )
     
 main()

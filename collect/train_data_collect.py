@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
 
-from name import *
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -49,23 +48,25 @@ def data_collect( data ):
     return result
 
 def main():
-    race_id_list = dm.pickle_load( UPDATE_RACE_ID_LIST, prod = True )
+    result = dm.pickle_load( "train_time_data.pickle", prod = True )
+
+    if result == None:
+        result = {}
+
+    prod_race_data = dm.pickle_load( "race_data.pickle", prod = True )
+    race_id_list = list( prod_race_data.keys() )
     cookie = lib.netkeiba_login()
     key_list = []
     url_list = []
 
     for race_id in race_id_list:
-        year = race_id[0:4]
-        url = "https://race.netkeiba.com/race/oikiri.html?race_id=" + race_id
-        key_list.append( race_id )
-        url_list.append( { "url": url, "cookie": cookie } )
+        if not race_id in result:
+            year = race_id[0:4]
+            url = "https://race.netkeiba.com/race/oikiri.html?race_id=" + race_id
+            key_list.append( race_id )
+            url_list.append( { "url": url, "cookie": cookie } )
 
     add_data = lib.thread_scraping( url_list, key_list ).data_get( data_collect )
-
-    result = dm.pickle_load( "train_time_data.pickle", prod = True )
-
-    if result == None:
-        result = {}
 
     for k in add_data.keys():
         result[k] = add_data[k]

@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 
-from name import *
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -36,8 +35,9 @@ def main():
 
     if result == None:
         result = {}
-    
-    race_id_list = dm.pickle_load( UPDATE_RACE_ID_LIST, prod = True )
+
+    prod_race_data = dm.pickle_load( "race_data.pickle", prod = True )
+    race_id_list = list( prod_race_data.keys() )
     
     url_list = []
     key_list = []
@@ -45,8 +45,9 @@ def main():
     base_url = "https://race.netkeiba.com/race/result.html?race_id="
 
     for race_id in race_id_list:
-        key_list.append( race_id )
-        url_list.append( race_id )
+        if not race_id in result:
+            key_list.append( race_id )
+            url_list.append( race_id )
 
     add_data = lib.thread_scraping( url_list, key_list ).data_get( day_get )
 
