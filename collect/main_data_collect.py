@@ -72,8 +72,8 @@ def main():
     current_year = int( datetime.datetime.today().year )
 
     for y in range( current_year, current_year + 1 ):
-        for p in range( 1, 11 ):
-            for m in range( 1, 11 ):
+        for p in range( 1, 12 ):
+            for m in range( 1, 12 ):
                 for d in range( 1, 13 ):
                     for r in range( 1, 13 ):
                         race_id = str( y ) + num_check( str( p ) ) + num_check( str( m ) ) + num_check( str( d ) ) + num_check( str( r ) )
