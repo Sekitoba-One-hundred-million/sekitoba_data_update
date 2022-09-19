@@ -3,7 +3,6 @@ import sekitoba_data_manage as dm
 
 import copy
 import trueskill
-from tqdm import tqdm
 
 def main():
     result = {}
@@ -12,7 +11,7 @@ def main():
     race_data = dm.pickle_load( "race_data.pickle", prod = True )
     horce_data = dm.pickle_load( "horce_data_storage.pickle", prod = True )
     
-    for k in tqdm( race_data.keys() ):
+    for k in race_data.keys():
         race_id = lib.id_get( k )
         year = race_id[0:4]
         race_place_num = race_id[4:6]
