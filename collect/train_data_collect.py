@@ -54,12 +54,14 @@ def main():
         result = {}
 
     prod_race_data = dm.pickle_load( "race_data.pickle", prod = True )
-    race_id_list = list( prod_race_data.keys() )
+    key_list = list( prod_race_data.keys() )
     cookie = lib.netkeiba_login()
     key_list = []
     url_list = []
 
-    for race_id in race_id_list:
+    for k in key_list:
+        race_id = lib.id_get( k )
+
         if not race_id in result:
             year = race_id[0:4]
             url = "https://race.netkeiba.com/race/oikiri.html?race_id=" + race_id

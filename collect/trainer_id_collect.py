@@ -46,11 +46,13 @@ def main():
     prod_race_data = dm.pickle_load( "race_data.pickle", prod = True )
     race_trainer_id_data = dm.pickle_load( "race_trainer_id_data.pickle", prod = True )
     trainer_id_data = dm.pickle_load( "trainer_id_data.pickle", prod = True )
-    race_id_list = list( prod_race_data.keys() )
+    key_list = list( prod_race_data.keys() )
     key_list = []
     url_list = []
 
-    for race_id in race_id_list:
+    for k in key_list:
+        race_id = lib.id_get( k )
+
         if not race_id in trainer_id_data:
             url = "https://race.netkeiba.com/race/shutuba.html?race_id=" + race_id
             key_list.append( race_id )
