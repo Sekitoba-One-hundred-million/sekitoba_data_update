@@ -69,7 +69,7 @@ def main():
             jockey_id_data[jockey_id] = True
 
     dm.pickle_upload( "race_jockey_id_data.pickle", race_jockey_id_data, prod = True )
-    dm.pickle_upload( "jockey_id_data.pickle", jockey_id_data )
+    dm.pickle_upload( "jockey_id_data.pickle", jockey_id_data, prod = True )
 
 if __name__ == "__main__":
     main()
