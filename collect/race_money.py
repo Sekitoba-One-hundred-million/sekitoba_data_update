@@ -39,12 +39,12 @@ def main():
     
     base_url = "https://race.netkeiba.com/race/result.html?race_id="
     prod_race_data = dm.pickle_load( "race_data.pickle", prod = True )
-    key_list = list( prod_race_data.keys() )
+    race_key_list = list( prod_race_data.keys() )
 
     url_data = []
     key_data = []
 
-    for k in key_list:
+    for k in race_key_list:
         race_id = lib.id_get( k )
         
         if not race_id in result:

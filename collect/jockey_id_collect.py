@@ -44,14 +44,14 @@ def data_collect( url ):
 
 def main():
     prod_race_data = dm.pickle_load( "race_data.pickle", prod = True )
-    key_list = list( prod_race_data.keys() )
+    race_key_list = list( prod_race_data.keys() )
 
     race_jockey_id_data = dm.pickle_load( "race_jockey_id_data.pickle" , prod = True )
     jockey_id_data = dm.pickle_load( "jockey_id_data.pickle", prod = True )
     key_list = []
     url_list = []
 
-    for k in key_list:
+    for k in race_key_list:
         race_id = lib.id_get( k )
         
         if not race_id in jockey_id_data:
