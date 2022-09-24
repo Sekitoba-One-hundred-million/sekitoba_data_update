@@ -2,6 +2,7 @@ import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
 import copy
+import datetime
 import trueskill
 
 def main():
