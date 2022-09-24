@@ -10,8 +10,20 @@ def main():
     env = trueskill.TrueSkill( draw_probability = 0 )
     race_data = dm.pickle_load( "race_data.pickle", prod = True )
     horce_data = dm.pickle_load( "horce_data_storage.pickle", prod = True )
-    
+    race_day = dm.pickle_load( "race_day.pickle", prod = True )
+
+    sort_time_data = []
+
     for k in race_data.keys():
+        race_id = lib.id_get( k )
+        day = race_day[race_id]
+        check_day = datetime.datetime( day["year"], day["month"], day["day"] )
+        sort_time_data.append( { "k": k, "time": datetime.datetime.timestamp( check_day ) } )
+
+    sort_time_data = sorted( sort_time_data, key=lambda x: x["time"] )
+    
+    for std in tqdm( sort_time_data ):
+        k = std["k"]
         race_id = lib.id_get( k )
         year = race_id[0:4]
         race_place_num = race_id[4:6]
