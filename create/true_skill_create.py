@@ -23,7 +23,7 @@ def main():
 
     sort_time_data = sorted( sort_time_data, key=lambda x: x["time"] )
     
-    for std in tqdm( sort_time_data ):
+    for std in sort_time_data:
         k = std["k"]
         race_id = lib.id_get( k )
         year = race_id[0:4]
