@@ -52,7 +52,6 @@ def main():
                 current_rating = env.create_rating()
 
             rank = cd.rank()
-            result[race_id][horce_id] = copy.deepcopy( current_rating.mu )
 
             if rank == 0:
                 continue
@@ -68,6 +67,7 @@ def main():
 
         for i in range( 0, len( next_rating_list ) ):
             horce_rating_data[horce_id_list[i]] = copy.deepcopy( next_rating_list[i][0] )
+            result[race_id][horce_id_list[i]] = copy.deepcopy( next_rating_list[i][0].mu )
 
     dm.pickle_upload( "true_skill_data.pickle", result, prod = True )
 
