@@ -2,19 +2,20 @@ import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
 def main():
-    result = dm.pickle_load( "race_rank_data.pickle", prod = True )
+    prod_race_data_storage = dm.pickle_load( "race_data.pickle", prod = True )
+    dev_race_data_storage = dm.pickle_load( "race_data.pickle" )
+    race_data = lib.link_prod_dev_data( prod_race_data_storage, dev_race_data_storage )
 
-    if result == None:
-        result = {}
-
-    prod_race_data = dm.pickle_load( "race_data.pickle", prod = True )
-    key_list = list( prod_race_data.keys() )        
+    prod_race_rank_data = dm.pickle_load( "race_rank_data.pickle", prod = True )
+    dev_race_rank_data = dm.pickle_load( "race_rank_data.pickle" )
+    race_rank_data = lib.link_prod_dev_data( prod_race_rank_data, dev_race_rank_data )
+    
     race_money_data = dm.pickle_load( "race_money_data.pickle", prod = True )
 
-    for k in key_list:
+    for k in race_data.keys():
         race_id = lib.id_get( k )
 
-        if race_id in result:
+        if race_id in race_rank_data:
             continue
         
         race_money = race_money_data[race_id]
@@ -29,9 +30,10 @@ def main():
         else:
             race_rank = 4
 
-        result[race_id] = race_rank
+        race_rank_data[race_id] = race_rank
 
-    dm.pickle_upload( "race_rank_data.pickle", result, prod = True )
+    dm.pickle_upload( "race_rank_data.pickle", race_rank_data, prod = True )
+    dm.pickle_upload( "race_rank_data.pickle", race_rank_data )
 
 if __name__ == "__main__":
     main()

@@ -69,17 +69,16 @@ def trainer_data_collect( trainer_id ):
     return result
 
 def main():
-    trainer_data = dm.pickle_load( "prod_trainer_data.pickle", prod = True )
-
-    if trainer_data == None:
-        trainer_data = {}
+    prod_trainer_data = dm.pickle_load( "prod_trainer_data.pickle", prod = True )
+    dev_trainer_data = dm.pickle_load( "trainer_full_data.pickle" )
+    trainer_data = lib.link_prod_dev_data( prod_trainer_data, dev_trainer_data, method = "value_length" )
     
     key_list = []
     url_list = []
+    id_data = lib.update_id_list_create()
     base_url = "https://db.netkeiba.com/?pid=trainer_detail&id="
-    trainer_id_data = dm.pickle_load( "trainer_id_data.pickle", prod = True )
     
-    for trainer_id in trainer_id_data.keys():
+    for trainer_id in id_data["trainer_id"].keys():
         url = base_url + trainer_id
         key_list.append( trainer_id )
         url_list.append( url )
@@ -90,6 +89,7 @@ def main():
         trainer_data[k] = add_data[k]
 
     dm.pickle_upload( "prod_trainer_data.pickle", trainer_data, prod = True )
+    dm.pickle_upload( "trainer_full_data.pickle", trainer_data )
 
 if __name__ == "__main__":
     main()

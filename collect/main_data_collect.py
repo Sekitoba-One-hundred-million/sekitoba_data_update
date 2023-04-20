@@ -4,6 +4,9 @@ from bs4 import BeautifulSoup
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
+LOG_DIR = "/Volumes/Gilgamesh/sekitoba-log/"
+HORCE_ID = "horce_id"
+
 def num_check( num ):
     if len( num ) == 1:
         return "0" + num
@@ -62,58 +65,55 @@ def race_data_search( url ):
     return current_race_data
 
 def main():
+    prod_race_data_storage = dm.pickle_load( "race_data.pickle", prod = True )
+    dev_race_data_storage = dm.pickle_load( "race_data.pickle" )
+    race_data_storage = lib.link_prod_dev_data( prod_race_data_storage, dev_race_data_storage )
+    update_id_data = lib.update_id_list_create()
     url_list = []
-    race_data_storage = dm.pickle_load( "race_data.pickle", prod = True )
-
-    if race_data_storage == None:
-        race_data_storage = {}
-
     base_url = "https://race.netkeiba.com/race/shutuba.html?race_id="
-    current_year = int( datetime.datetime.today().year )
 
-    for y in range( current_year, current_year + 1 ):
-        for p in range( 1, 12 ):
-            for m in range( 1, 12 ):
-                for d in range( 1, 13 ):
-                    for r in range( 1, 13 ):
-                        race_id = str( y ) + num_check( str( p ) ) + num_check( str( m ) ) + num_check( str( d ) ) + num_check( str( r ) )
-                        url = base_url + race_id
-
-                        try:
-                            race_data_storage[url]
-                        except:
-                            url_list.append( url )
+    for race_id in update_id_data["race_id"].keys():
+        url = base_url + race_id
+        url_list.append( url )
 
     update_horce_url = {}
     add_race_data = lib.thread_scraping( url_list, url_list ).data_get( race_data_search )
-    need_update_race_id_list = []
-    need_update_horce_id_list = []
 
     for k in add_race_data.keys():
         if len( add_race_data[k] ) == 0:
             continue
-
+        
         race_data_storage[k] = add_race_data[k]
-        need_update_race_id_list.append( lib.id_get( k ) )
 
         for horce_id in add_race_data[k].keys():
             update_horce_url[horce_id] = "https://db.netkeiba.com/horse/" + horce_id
-            need_update_horce_id_list.append( horce_id )
 
     horce_url_list = []
     horce_id_list = []
 
-    for k in update_horce_url.keys():
-        horce_id_list.append( k )
-        horce_url_list.append( update_horce_url[k] )
+    for horce_id in update_horce_url.keys():
+        horce_id_list.append( horce_id )
+        horce_url_list.append( update_horce_url[horce_id] )
 
-    horce_data_storage = dm.pickle_load( "horce_data_storage.pickle", prod = True )
+    prod_horce_data_storage = dm.pickle_load( "horce_data_storage.pickle", prod = True )
+    dev_horce_data_storage = dm.pickle_load( "horce_data_storage.pickle" )
+    horce_data_storage = lib.link_prod_dev_data( prod_horce_data_storage, dev_horce_data_storage, method = "value_length" )
     add_horce_data = lib.thread_scraping( horce_url_list, horce_id_list ).data_get( horce_data_collect )
-
-    for k in add_horce_data.keys():
-        horce_data_storage[k] = add_horce_data[k]
+    
+    for horce_id in add_horce_data.keys():
+        horce_data_storage[horce_id] = add_horce_data[horce_id]
 
     dm.pickle_upload( "race_data.pickle", race_data_storage, prod = True )
+    dm.pickle_upload( "race_data.pickle", race_data_storage )
     dm.pickle_upload( "horce_data_storage.pickle", horce_data_storage, prod = True )
-    
-main()
+    dm.pickle_upload( "horce_data_storage.pickle", horce_data_storage )
+
+    f = open( LOG_DIR + "update_id_data.txt", "a" )
+
+    for horce_id in update_horce_url.keys():
+        f.write( "{} {}\n".format( HORCE_ID, horce_id ) )
+
+    f.close()
+
+if __name__ == "__main__":
+    main()

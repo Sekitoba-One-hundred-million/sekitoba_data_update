@@ -70,25 +70,21 @@ def joceky_data_collect( jockey_id ):
     return result
 
 def main():
-    jockey_data = dm.pickle_load( "prod_jockey_data.pickle", prod = True )
-
-    if jockey_data == None:
-        jockey_data = {}
-    
+    prod_jockey_data = dm.pickle_load( "prod_jockey_data.pickle", prod = True )
+    dev_jockey_data = dm.pickle_load( "jockey_full_data.pickle" )
+    jockey_data = lib.link_prod_dev_data( prod_jockey_data, dev_jockey_data, method = "value_length" )
+        
     key_list = []
-    base_url = "https://db.netkeiba.com/?pid=jockey_detail&id="
-    jockey_id_data = dm.pickle_load( "jockey_id_data.pickle", prod = True )
-    
-    for jockey_id in jockey_id_data.keys():
-        url = base_url + jockey_id
-        key_list.append( jockey_id )
-
+    base_url = "https://db.netkeiba.com/?pid=jockey_detail&id="    
+    id_data = lib.update_id_list_create()    
+    key_list = list( id_data["jockey_id"].keys() )
     add_data = lib.thread_scraping( key_list, key_list ).data_get( joceky_data_collect )
 
     for k in add_data.keys():
         jockey_data[k] = add_data[k]
 
     dm.pickle_upload( "prod_jockey_data.pickle", jockey_data, prod = True )
+    dm.pickle_upload( "jockey_full_data.pickle", jockey_data )
 
 if __name__ == "__main__":
     main()

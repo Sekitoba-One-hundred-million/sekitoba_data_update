@@ -9,7 +9,7 @@ def main():
     horce_rating_data = {}
     jockey_rating_data = {}
     env = trueskill.TrueSkill( draw_probability = 0, beta = 12 )
-    race_data = dm.pickle_load( "race_data.pickle", prod = True )
+    race_data = dm.pickle_load( "race_data.pickle" )
     horce_data = dm.pickle_load( "horce_data_storage.pickle", prod = True )
     race_day = dm.pickle_load( "race_day.pickle", prod = True )
     race_jockey_id_data = dm.pickle_load( "race_jockey_id_data.pickle" )
@@ -32,11 +32,7 @@ def main():
         day = race_id[9]
         num = race_id[7]
 
-        try:
-            jockey_id_list = race_jockey_id_data[race_id]
-        except:
-            continue
-
+        jockey_id_list = race_jockey_id_data[race_id]
         rank_list = []
         rating_list = []
         use_jockey_id_list = []
@@ -95,6 +91,7 @@ def main():
         result["jockey"][jockey_id] = jockey_rating_data[jockey_id].mu
         
     dm.pickle_upload( "true_skill_data.pickle", result, prod = True )
+    dm.pickle_upload( "horce_jockey_true_skill_data.pickle", result )
 
 if __name__ == "__main__":
     main()

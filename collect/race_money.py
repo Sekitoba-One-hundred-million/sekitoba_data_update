@@ -32,22 +32,18 @@ def race_money_get( url ):
     return money
 
 def main():
-    result = dm.pickle_load( "race_money_data.pickle" )
+    prod_race_money_data = dm.pickle_load( "race_money_data.pickle", prod = True )
+    dev_race_money_data = dm.pickle_load( "race_money_data.pickle" )
+    race_money_data = lib.link_prod_dev_data( prod_race_money_data, dev_race_money_data )
 
-    if result == None:
-        result = {}
-    
     base_url = "https://race.netkeiba.com/race/result.html?race_id="
-    prod_race_data = dm.pickle_load( "race_data.pickle", prod = True )
-    race_key_list = list( prod_race_data.keys() )
+    id_data = lib.update_id_list_create()
 
     url_data = []
     key_data = []
 
-    for k in race_key_list:
-        race_id = lib.id_get( k )
-        
-        if not race_id in result:
+    for race_id in id_data["race_id"].keys():
+        if not race_id in race_money_data:
             url = base_url + race_id
             url_data.append( url )
             key_data.append( race_id )
@@ -55,9 +51,10 @@ def main():
     add_data = lib.thread_scraping( url_data, key_data ).data_get( race_money_get )
 
     for k in add_data.keys():
-        result[k] = add_data[k]
+        race_money_data[k] = add_data[k]
     
-    dm.pickle_upload( "race_money_data.pickle", result, prod = True )
+    dm.pickle_upload( "race_money_data.pickle", race_money_data, prod = True )
+    dm.pickle_upload( "race_money_data.pickle", race_money_data )
 
 main()
 

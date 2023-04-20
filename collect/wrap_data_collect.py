@@ -27,21 +27,17 @@ def wrap_get( url ):
     return result
 
 def main():    
+    prod_wrap_data = dm.pickle_load( "wrap_data.pickle", prod = True )
+    dev_wrap_data = dm.pickle_load( "wrap_data.pickle" )
+    wrap_data = lib.link_prod_dev_data( prod_wrap_data, dev_wrap_data )
+
+    id_data = lib.update_id_list_create()
     base_url =  "https://race.netkeiba.com/race/result.html?race_id="
-    prod_race_data = dm.pickle_load( "race_data.pickle", prod = True )
-    race_key_list = list( prod_race_data.keys() )
-    result = dm.pickle_load( "wrap_data.pickle", prod = True )
-
-    if result == None:
-        result = {}
-
     url_list = []
     key_list = []
 
-    for k in race_key_list:
-        race_id = lib.id_get( k )
-        
-        if not race_id in result:
+    for race_id in id_data["race_id"]:
+        if not race_id in wrap_data:
             url = base_url + race_id
             url_list.append( url )
             key_list.append( race_id )
@@ -49,9 +45,10 @@ def main():
     add_data = lib.thread_scraping( url_list, key_list ).data_get( wrap_get )
         
     for k in add_data.keys():
-        result[k] = add_data[k]
+        wrap_data[k] = add_data[k]
     
-    dm.pickle_upload( "wrap_data.pickle", result, prod = True )
+    dm.pickle_upload( "wrap_data.pickle", wrap_data, prod = True )
+    dm.pickle_upload( "wrap_data.pickle", wrap_data )
 
 main()
 

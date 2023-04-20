@@ -91,7 +91,9 @@ def main():
                 result[place][cource][load]["time"] /= result[place][cource][load]["count"]
                 
     dm.pickle_upload( "train_ave_data.pickle", result, prod = True )
+    dm.pickle_upload( "train_ave_data.pickle", result )
     dm.pickle_upload( "train_ave_key_data.pickle", key_data, prod = True )
+    dm.pickle_upload( "train_ave_key_data.pickle", key_data )
 
 if __name__ == "__main__":
     main()

@@ -31,32 +31,24 @@ def day_get( race_id ):
     return result
 
 def main():    
-    result = dm.pickle_load( "race_day.pickle", prod = True )
-
-    if result == None:
-        result = {}
-
-    prod_race_data = dm.pickle_load( "race_data.pickle", prod = True )
-    race_key_list = list( prod_race_data.keys() )
+    prod_race_day_data = dm.pickle_load( "race_day.pickle", prod = True )
+    dev_race_day_data = dm.pickle_load( "race_day.pickle" )
+    race_day_data = lib.link_prod_dev_data( prod_race_day_data, dev_race_day_data )
     
-    url_list = []
+    id_data = lib.update_id_list_create()
     key_list = []
 
-    base_url = "https://race.netkeiba.com/race/result.html?race_id="
-
-    for k in race_key_list:
-        race_id = lib.id_get( k )
-
-        if not race_id in result:
+    for race_id in id_data["race_id"].keys():
+        if not race_id in race_day_data:
             key_list.append( race_id )
-            url_list.append( race_id )
-
-    add_data = lib.thread_scraping( url_list, key_list ).data_get( day_get )
+    
+    add_data = lib.thread_scraping( key_list, key_list ).data_get( day_get )
 
     for k in add_data.keys():
-        result[k] = add_data[k]
+        race_day_data[k] = add_data[k]
 
-    dm.pickle_upload( "race_day.pickle", result, prod = True )
+    dm.pickle_upload( "race_day.pickle", race_day_data, prod = True )
+    dm.pickle_upload( "race_day.pickle", race_day_data )
     
 main()
     
