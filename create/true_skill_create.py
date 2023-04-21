@@ -23,6 +23,7 @@ def main():
         sort_time_data.append( { "k": k, "time": datetime.datetime.timestamp( check_day ) } )
 
     sort_time_data = sorted( sort_time_data, key=lambda x: x["time"] )
+    dev_result = { "horce": {}, "jockey": {} }
     
     for std in sort_time_data:
         k = std["k"]
@@ -32,6 +33,8 @@ def main():
         day = race_id[9]
         num = race_id[7]
 
+        dev_result["horce"][race_id] = {}
+        dev_result["jockey"][race_id] = {}
         jockey_id_list = race_jockey_id_data[race_id]
         rank_list = []
         rating_list = []
@@ -71,6 +74,8 @@ def main():
             rank_list.append( int( rank - 1 ) )
             use_jockey_id_list.append( jockey_id )
             use_horce_id_list.append( horce_id )
+            dev_result["horce"][race_id][horce_id] = horce_current_rating.mu
+            dev_result["jockey"][race_id][jockey_id] = jockey_current_rating.mu
             rating_list.append( ( copy.deepcopy( horce_current_rating ), copy.deepcopy( jockey_current_rating ) ) )
 
         if len( use_horce_id_list ) < 2:
@@ -82,16 +87,16 @@ def main():
             horce_rating_data[use_horce_id_list[i]] = copy.deepcopy( next_rating_list[i][0] )
             jockey_rating_data[use_jockey_id_list[i]] = copy.deepcopy( next_rating_list[i][1] )
 
-    result = { "horce": {}, "jockey": {} }
+    prod_result = { "horce": {}, "jockey": {} }
 
     for horce_id in horce_rating_data.keys():
-        result["horce"][horce_id] = horce_rating_data[horce_id].mu
+        prod_result["horce"][horce_id] = horce_rating_data[horce_id].mu
 
     for jockey_id in jockey_rating_data.keys():
-        result["jockey"][jockey_id] = jockey_rating_data[jockey_id].mu
+        prod_result["jockey"][jockey_id] = jockey_rating_data[jockey_id].mu
         
-    dm.pickle_upload( "true_skill_data.pickle", result, prod = True )
-    dm.pickle_upload( "horce_jockey_true_skill_data.pickle", result )
+    dm.pickle_upload( "true_skill_data.pickle", prod_result, prod = True )
+    dm.pickle_upload( "horce_jockey_true_skill_data.pickle", dev_result )
 
 if __name__ == "__main__":
     main()

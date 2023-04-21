@@ -21,7 +21,7 @@ def data_collect( url ):
                 td_class_name = td.get( "class" )
                 
                 if not td_class_name == None:
-                    if td_class_name[0] == "Horse_Info":
+                    if td_class_name[0] == "HorseInfo":
                         a = td.find( "a" )
                         try:
                             href = a.get( "href" )
