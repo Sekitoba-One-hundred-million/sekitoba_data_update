@@ -69,9 +69,7 @@ def trainer_data_collect( trainer_id ):
     return result
 
 def main():
-    prod_trainer_data = dm.pickle_load( "prod_trainer_data.pickle", prod = True )
-    dev_trainer_data = dm.pickle_load( "trainer_full_data.pickle" )
-    trainer_data = lib.link_prod_dev_data( prod_trainer_data, dev_trainer_data, method = "value_length" )
+    trainer_data = dm.pickle_load( "trainer_full_data.pickle" )
     
     key_list = []
     url_list = []
@@ -88,7 +86,6 @@ def main():
     for k in add_data.keys():
         trainer_data[k] = add_data[k]
 
-    dm.pickle_upload( "prod_trainer_data.pickle", trainer_data, prod = True )
     dm.pickle_upload( "trainer_full_data.pickle", trainer_data )
 
 if __name__ == "__main__":

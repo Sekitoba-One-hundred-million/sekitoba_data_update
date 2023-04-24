@@ -31,9 +31,11 @@ def data_collect( url ):
     return horce_sex
 
 def main():
-    horce_sex_data = dm.pickle_load( "horce_sex_data.pickle" )
-    id_data = lib.update_id_list_create()
+    #horce_sex_data = dm.pickle_load( "horce_sex_data.pickle" )
+    #id_data = lib.update_id_list_create()
     base_url = "https://db.netkeiba.com/horse/"
+    print( data_collect( base_url + "2018110064" ) )
+    return
     url_list = []
     key_list = []
 

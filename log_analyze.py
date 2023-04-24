@@ -1,5 +1,6 @@
 import os
 import glob
+import datetime
 
 LOG_DIR = "/Volumes/Gilgamesh/sekitoba-log/"
 RACE_ID = "race_id"
@@ -39,36 +40,30 @@ def add_id( file_name, id_data ):
             get_id( str_data, TRAINER_ID, id_data )
 
 def main():
-    analyze_check_file = LOG_DIR + "analyze_check.txt"
-    checked_day = {}
-    
-    if os.path.isfile( analyze_check_file ):
-        f = open( LOG_DIR + "analyze_check.txt", "r" )
-        all_data = f.readlines()
-        f.close()
-
-        for str_data in all_data:
-            day = str_data.replace( "\n", "" )
-            checked_day[day] = True
-
     log_files = glob.glob( LOG_DIR + "*" )
     id_data = { RACE_ID: {}, JOCKEY_ID: {}, HORCE_ID: {}, TRAINER_ID: {} }
+    max_timestamp = -1
+    file_list = []
 
     for log_file in log_files:
-        day = log_file.split( "/" )[-1]
+        day = log_file.split( "/" )[-1].split( "-" )
 
-        if day in checked_day:
+        if not len( day ) == 3:
             continue
+        
+        check_day = datetime.datetime( int( day[0] ), int( day[1] ), int( day[2] ) )
+        timestamp = int( datetime.datetime.timestamp( check_day ) )
+        max_timestamp = max( timestamp, max_timestamp )
+        file_list.append( { "timestamp": timestamp, "file": log_file } )
 
-        checked_day[day] = True
-        add_id( log_file, id_data )
-
-    f = open( analyze_check_file, "w" )
-
-    for day in checked_day.keys():
-        f.write( day + "\n" )
-    
-    f.close()
+    limit_timestamp = 60 * 60 * 24 * 14 # 二週間
+        
+    for file_data in file_list:
+        diff_timestamp = int( max_timestamp - file_data["timestamp"] )
+        
+        if diff_timestamp < limit_timestamp:
+            print( file_data )
+            add_id( file_data["file"], id_data )
     
     f = open( LOG_DIR + "update_id_data.txt", "w" )
 

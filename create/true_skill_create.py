@@ -4,10 +4,12 @@ import sekitoba_data_manage as dm
 import copy
 import datetime
 import trueskill
+from tqdm import tqdm
 
 def main():
     horce_rating_data = {}
     jockey_rating_data = {}
+    use_jockey_rateing = {}
     env = trueskill.TrueSkill( draw_probability = 0, beta = 12 )
     race_data = dm.pickle_load( "race_data.pickle" )
     horce_data = dm.pickle_load( "horce_data_storage.pickle", prod = True )
@@ -20,12 +22,15 @@ def main():
         race_id = lib.id_get( k )
         day = race_day[race_id]
         check_day = datetime.datetime( day["year"], day["month"], day["day"] )
-        sort_time_data.append( { "k": k, "time": datetime.datetime.timestamp( check_day ) } )
+        race_num = int( race_id[-2:] )
+        timestamp = int( datetime.datetime.timestamp( check_day ) + race_num )
+        sort_time_data.append( { "k": k, "time": timestamp } )
 
+    line_timestamp = 60 * 60 * 24 * 2 - 100 # 2day race_numがあるので -100
     sort_time_data = sorted( sort_time_data, key=lambda x: x["time"] )
     dev_result = { "horce": {}, "jockey": {} }
     
-    for std in sort_time_data:
+    for i, std in enumerate( sort_time_data ):
         k = std["k"]
         race_id = lib.id_get( k )
         year = race_id[0:4]
@@ -40,6 +45,15 @@ def main():
         rating_list = []
         use_jockey_id_list = []
         use_horce_id_list = []
+
+        if not i == 0:
+            current_timestamp = std["time"]
+            before_timestamp = sort_time_data[i-1]["time"]
+            diff_timestamp = int( current_timestamp - before_timestamp )
+
+            if line_timestamp < diff_timestamp:
+                #print( diff_timestamp, std["k"] )
+                use_jockey_rateing = copy.deepcopy( jockey_rating_data )
 
         for kk in race_data[k].keys():
             horce_id = kk
@@ -66,6 +80,11 @@ def main():
             except:
                 horce_current_rating = env.create_rating()
 
+            try:
+                use_jockey_current_rateing = use_jockey_rateing[jockey_id]
+            except:
+                use_jockey_current_rateing = env.create_rating()
+
             rank = cd.rank()
 
             if rank == 0:
@@ -75,7 +94,7 @@ def main():
             use_jockey_id_list.append( jockey_id )
             use_horce_id_list.append( horce_id )
             dev_result["horce"][race_id][horce_id] = horce_current_rating.mu
-            dev_result["jockey"][race_id][jockey_id] = jockey_current_rating.mu
+            dev_result["jockey"][race_id][jockey_id] = use_jockey_current_rateing.mu
             rating_list.append( ( copy.deepcopy( horce_current_rating ), copy.deepcopy( jockey_current_rating ) ) )
 
         if len( use_horce_id_list ) < 2:

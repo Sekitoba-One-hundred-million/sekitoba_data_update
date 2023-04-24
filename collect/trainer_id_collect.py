@@ -46,7 +46,7 @@ def main():
     prod_race_trainer_id_data = dm.pickle_load( "race_trainer_id_data.pickle", prod = True )
     dev_race_trainer_id_data = dm.pickle_load( "race_trainer_id_data.pickle", prod = True )
     prod_trainer_id_data = dm.pickle_load( "trainer_id_data.pickle", prod = True )
-    dev_trainer_id_data = dm.pickle_load( "trainer_id_data.pickle", prod = True )
+    dev_trainer_id_data = dm.pickle_load( "trainer_id_data.pickle" )
 
     race_trainer_id_data = lib.link_prod_dev_data( prod_race_trainer_id_data, dev_race_trainer_id_data )
     trainer_id_data = lib.link_prod_dev_data( prod_trainer_id_data, dev_trainer_id_data )

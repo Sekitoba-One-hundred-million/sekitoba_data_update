@@ -1,4 +1,3 @@
-log_analyze.py
 collect/main_data_collect.py
 collect/race_day_get.py
 collect/race_money.py
@@ -25,3 +24,4 @@ create/trainer_data_analyze.py
 create/race_level.py
 create/train_ave_data_create.py
 create/true_skill_create.py
+create/jockey_data_analyze.py
