@@ -44,7 +44,7 @@ def data_collect( url ):
 
 def main():
     prod_race_trainer_id_data = dm.pickle_load( "race_trainer_id_data.pickle", prod = True )
-    dev_race_trainer_id_data = dm.pickle_load( "race_trainer_id_data.pickle", prod = True )
+    dev_race_trainer_id_data = dm.pickle_load( "race_trainer_id_data.pickle" )
     prod_trainer_id_data = dm.pickle_load( "trainer_id_data.pickle", prod = True )
     dev_trainer_id_data = dm.pickle_load( "trainer_id_data.pickle" )
 
