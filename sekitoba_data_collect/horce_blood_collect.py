@@ -39,12 +39,12 @@ def data_collect( data ):
 
 def main():
     horce_blood_type_data = dm.pickle_load( "horce_blood_type_data.pickle" )
-    id_data = lib.update_id_list_create()
+    update_race_id_data = dm.pickle_load( "update_race_id_list.pickle" )
     cookie = lib.netkeiba_login()
     key_list = []
     url_list = []
 
-    for race_id in id_data["race_id"]:
+    for race_id in update_race_id_data:
         if not race_id in horce_blood_type_data:
             url = "https://race.netkeiba.com/race/bias.html?race_id=" + race_id
             url_list.append( { "url": url, "cookie": cookie } )
@@ -55,8 +55,7 @@ def main():
     for k in add_data.keys():
         horce_blood_type_data[k] = add_data[k]
         
-    dm.pickle_upload( "horce_blood_type_data.pickle", horce_blood_type_data )
-    
+    dm.pickle_upload( "horce_blood_type_data.pickle", horce_blood_type_data )    
 
 if __name__ == "__main__":
     main()

@@ -29,16 +29,14 @@ def data_collect( data ):
 def main():
     baba_index_data = dm.pickle_load( "baba_index_data.pickle" )
     cookie = lib.netkeiba_login()
-    id_data = lib.update_id_list_create()
-    key_list = []
+    update_horce_id_data = dm.pickle_load( "update_horce_id_list.pickle" )
     url_list = []
 
-    for horce_id in id_data["horce_id"].keys():
-        key_list.append( horce_id )
+    for horce_id in update_horce_id_data:
         url = "https://db.netkeiba.com/horse/" + horce_id
         url_list.append( { "url": url, "cookie": cookie } )
 
-    add_data = lib.thread_scraping( url_list, key_list ).data_get( data_collect )
+    add_data = lib.thread_scraping( url_list, update_horce_id_data ).data_get( data_collect )
 
     for k in add_data.keys():
         baba_index_data[k] = add_data[k]    

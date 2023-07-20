@@ -1,3 +1,7 @@
+./file_check.sh
+
+exit 0
+
 while read line
 do
     echo start $line

@@ -11,7 +11,7 @@ import sekitoba_data_manage as dm
 def data_get( driver, url ):
     driver, _ = lib.driver_request( driver, url )
     html = driver.page_source.encode('utf-8')
-    soup = BeautifulSoup( html, "html.parser" )        
+    soup = BeautifulSoup( html, "html.parser" )
 
     td_tag = soup.findAll( "td" )
     instance = []

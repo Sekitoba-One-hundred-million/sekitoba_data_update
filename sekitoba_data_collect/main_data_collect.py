@@ -65,14 +65,12 @@ def race_data_search( url ):
     return current_race_data
 
 def main():
-    prod_race_data_storage = dm.pickle_load( "race_data.pickle", prod = True )
-    dev_race_data_storage = dm.pickle_load( "race_data.pickle" )
-    race_data_storage = lib.link_prod_dev_data( prod_race_data_storage, dev_race_data_storage )
-    update_id_data = lib.update_id_list_create()
+    race_data = dm.pickle_load( "race_data.pickle" )
+    update_race_id_data = dm.pickle_load( "update_race_id_list.pickle" )
     url_list = []
     base_url = "https://race.netkeiba.com/race/shutuba.html?race_id="
 
-    for race_id in update_id_data["race_id"].keys():
+    for race_id in update_race_id_data:
         url = base_url + race_id
         url_list.append( url )
 
@@ -83,7 +81,7 @@ def main():
         if len( add_race_data[k] ) == 0:
             continue
         
-        race_data_storage[k] = add_race_data[k]
+        race_data[k] = add_race_data[k]
 
         for horce_id in add_race_data[k].keys():
             update_horce_url[horce_id] = "https://db.netkeiba.com/horse/" + horce_id
@@ -95,25 +93,15 @@ def main():
         horce_id_list.append( horce_id )
         horce_url_list.append( update_horce_url[horce_id] )
 
-    prod_horce_data_storage = dm.pickle_load( "horce_data_storage.pickle", prod = True )
-    dev_horce_data_storage = dm.pickle_load( "horce_data_storage.pickle" )
-    horce_data_storage = lib.link_prod_dev_data( prod_horce_data_storage, dev_horce_data_storage, method = "value_length" )
+    horce_data = dm.pickle_load( "horce_data_storage.pickle" )
     add_horce_data = lib.thread_scraping( horce_url_list, horce_id_list ).data_get( horce_data_collect )
     
     for horce_id in add_horce_data.keys():
-        horce_data_storage[horce_id] = add_horce_data[horce_id]
+        horce_data[horce_id] = add_horce_data[horce_id]
 
-    dm.pickle_upload( "race_data.pickle", race_data_storage, prod = True )
-    dm.pickle_upload( "race_data.pickle", race_data_storage )
-    dm.pickle_upload( "horce_data_storage.pickle", horce_data_storage, prod = True )
-    dm.pickle_upload( "horce_data_storage.pickle", horce_data_storage )
-
-    f = open( LOG_DIR + "update_id_data.txt", "a" )
-
-    for horce_id in update_horce_url.keys():
-        f.write( "{} {}\n".format( HORCE_ID, horce_id ) )
-
-    f.close()
-
+    dm.pickle_upload( "update_horce_id_list.pickle", horce_id_list )
+    dm.pickle_upload( "race_data.pickle", race_data )
+    dm.pickle_upload( "horce_data_storage.pickle", horce_data )
+    
 if __name__ == "__main__":
     main()
