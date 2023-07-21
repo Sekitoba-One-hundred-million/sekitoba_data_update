@@ -37,11 +37,11 @@ def data_get( url ):
 
 def main():
     race_info_data = dm.pickle_load( "race_info_data.pickle" )
+    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
     url_list = []
     key_list = []
-    id_data = lib.update_id_list_create()
 
-    for race_id in id_data["race_id"].keys():
+    for race_id in update_race_id_list:
         if not race_id in race_info_data:
             url_list.append( "https://race.netkeiba.com/race/result.html?race_id=" + race_id )
             key_list.append( race_id )

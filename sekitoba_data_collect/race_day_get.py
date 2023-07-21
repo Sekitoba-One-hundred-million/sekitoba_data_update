@@ -31,14 +31,12 @@ def day_get( race_id ):
     return result
 
 def main():    
-    prod_race_day_data = dm.pickle_load( "race_day.pickle", prod = True )
-    dev_race_day_data = dm.pickle_load( "race_day.pickle" )
-    race_day_data = lib.link_prod_dev_data( prod_race_day_data, dev_race_day_data )
+    race_day_data = dm.pickle_load( "race_day.pickle" )
+    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
     
-    id_data = lib.update_id_list_create()
     key_list = []
 
-    for race_id in id_data["race_id"].keys():
+    for race_id in update_race_id_list:
         if not race_id in race_day_data:
             key_list.append( race_id )
     
@@ -47,7 +45,6 @@ def main():
     for k in add_data.keys():
         race_day_data[k] = add_data[k]
 
-    dm.pickle_upload( "race_day.pickle", race_day_data, prod = True )
     dm.pickle_upload( "race_day.pickle", race_day_data )
     
 main()

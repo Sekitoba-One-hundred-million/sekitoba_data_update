@@ -26,16 +26,14 @@ def data_collect( data ):
     return result
 
 def main():
-    prod_time_index_data = dm.pickle_load( "time_index_data.pickle", prod = True )
-    dev_time_index_data = dm.pickle_load( "time_index_data.pickle" )
-    time_index_data = lib.link_prod_dev_data( prod_time_index_data, dev_time_index_data, method = "value_length" )
-    
+    time_index_data = dm.pickle_load( "time_index_data.pickle" )
+    update_horce_id_list = dm.pickle_load( "update_horce_id_list.pickle" )
     cookie = lib.netkeiba_login()
-    id_data = lib.update_id_list_create()
+
     key_list = []
     url_list = []
 
-    for horce_id in id_data["horce_id"].keys():
+    for horce_id in update_horce_id_list:
         key_list.append( horce_id )
         url = "https://db.netkeiba.com/horse/" + horce_id
         url_list.append( { "url": url, "cookie": cookie } )
@@ -46,7 +44,6 @@ def main():
         time_index_data[k] = add_data[k]
         
     dm.pickle_upload( "time_index_data.pickle", time_index_data )
-    dm.pickle_upload( "time_index_data.pickle", time_index_data, prod = True )
 
 if __name__ == "__main__":
     main()

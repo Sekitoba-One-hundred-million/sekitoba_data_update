@@ -32,11 +32,11 @@ def data_collect( url ):
 
 def main():
     horce_sex_data = dm.pickle_load( "horce_sex_data.pickle" )
-    id_data = lib.update_id_list_create()
+    update_horce_id_list = dm.pickle_load( "update_horce_id_list.pickle" )
     url_list = []
     key_list = []
 
-    for horce_id in id_data["horce_id"].keys():
+    for horce_id in update_horce_id_list:
         if not horce_id in horce_sex_data:
             url = base_url + horce_id
             key_list.append( horce_id )

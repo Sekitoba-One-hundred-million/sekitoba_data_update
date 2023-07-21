@@ -24,7 +24,7 @@ for data in `cat ${pickle_info} | grep ${sekitoba_data_collect}`; do
 
         if [ $? -eq 1 ]; then
             status=1
-            #echo "not found ${file_name}"
+            echo "not found ${file_name}"
         fi
      fi
 done
@@ -42,7 +42,7 @@ for data in `cat ${pickle_info} | grep ${sekitoba_use_data}`; do
 
         if [ $? -eq 1 ]; then
             status=1
-            #echo "not found ${file_name}"
+            echo "not found ${file_name}"
         fi
      fi
 done

@@ -79,12 +79,11 @@ def main():
     omega_index_data = dm.pickle_load( "omega_index_data.pickle" )
     race_day_data = dm.pickle_load( "race_day.pickle" )
     race_info_data = dm.pickle_load( "race_info_data.pickle" )
+    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
     test_year = int( lib.test_years[-1] )
     month = 13
 
-    id_data = lib.update_id_list_create()
-
-    for race_id in id_data["race_id"].keys():
+    for race_id in update_race_id_list:
         if race_id in omega_index_data:
             continue
         

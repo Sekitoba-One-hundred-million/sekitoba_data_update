@@ -48,16 +48,14 @@ def data_collect( data ):
     return result
 
 def main():
-    prod_train_time_data = dm.pickle_load( "train_time_data.pickle", prod = True )
-    dev_train_time_data = dm.pickle_load( "train_time_data.pickle", prod = True )
-    train_time_data = lib.link_prod_dev_data( prod_train_time_data, dev_train_time_data )
+    train_time_data = dm.pickle_load( "train_time_data.pickle" )
+    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
 
-    id_data = lib.update_id_list_create()
     cookie = lib.netkeiba_login()
     key_list = []
     url_list = []
 
-    for race_id in id_data["race_id"].keys():
+    for race_id in update_race_id_list:
         if not race_id in train_time_data:
             url = "https://race.netkeiba.com/race/oikiri.html?race_id=" + race_id
             key_list.append( race_id )
@@ -68,7 +66,6 @@ def main():
     for k in add_data.keys():
         train_time_data[k] = add_data[k]
         
-    dm.pickle_upload( "train_time_data.pickle", train_time_data, prod = True )
     dm.pickle_upload( "train_time_data.pickle", train_time_data )
 
 if __name__ == "__main__":

@@ -43,19 +43,15 @@ def data_collect( url ):
     return result
 
 def main():
-    prod_race_trainer_id_data = dm.pickle_load( "race_trainer_id_data.pickle", prod = True )
-    dev_race_trainer_id_data = dm.pickle_load( "race_trainer_id_data.pickle" )
-    prod_trainer_id_data = dm.pickle_load( "trainer_id_data.pickle", prod = True )
-    dev_trainer_id_data = dm.pickle_load( "trainer_id_data.pickle" )
+    race_trainer_id_data = dm.pickle_load( "race_trainer_id_data.pickle" )
+    trainer_id_data = dm.pickle_load( "trainer_id_data.pickle" )
 
-    race_trainer_id_data = lib.link_prod_dev_data( prod_race_trainer_id_data, dev_race_trainer_id_data )
-    trainer_id_data = lib.link_prod_dev_data( prod_trainer_id_data, dev_trainer_id_data )
 
-    id_data = lib.update_id_list_create()
+    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
     key_list = []
     url_list = []
 
-    for race_id in id_data["race_id"].keys():
+    for race_id in update_race_id_list:
         url = "https://race.netkeiba.com/race/shutuba.html?race_id=" + race_id
         key_list.append( race_id )
         url_list.append( url )
@@ -69,10 +65,8 @@ def main():
             trainer_id = copy.copy( add_data[k][kk] )
             trainer_id_data[trainer_id] = True
 
-    dm.pickle_upload( "race_trainer_id_data.pickle", race_trainer_id_data, prod = True )
-    dm.pickle_upload( "race_trainer_id_data.pickle", race_trainer_id_data )
-    dm.pickle_upload( "trainer_id_data.pickle", trainer_id_data, prod = True )
     dm.pickle_upload( "trainer_id_data.pickle", trainer_id_data )
+    dm.pickle_upload( "race_trainer_id_data.pickle", race_trainer_id_data )
 
 if __name__ == "__main__":
     main()

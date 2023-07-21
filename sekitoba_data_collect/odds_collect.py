@@ -45,11 +45,11 @@ def money_get( url ):
 def main():
     odds_data = dm.pickle_load( "odds_data.pickle" )
     base_url = "https://race.netkeiba.com/race/result.html?race_id="
-    id_data = lib.update_id_list_create()
+    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
     url_data = []
     key_data = []
     
-    for race_id in id_data["race_id"].keys():
+    for race_id in update_race_id_list:
         if not race_id in odds_data:
             url = base_url + race_id + "&rf=race_list"
             url_data.append( url )

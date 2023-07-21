@@ -43,25 +43,20 @@ def data_collect( url ):
     return result            
 
 def main():
-    prod_race_jockey_id_data = dm.pickle_load( "race_jockey_id_data.pickle"  )
-    dev_race_jockey_id_data = dm.pickle_load( "race_jockey_id_data.pickle" )
-    prod_jockey_id_data = dm.pickle_load( "jockey_id_data.pickle", prod = True )
-    dev_jockey_id_data = dm.pickle_load( "jockey_id_data.pickle" )
-
-    race_jockey_id_data = lib.link_prod_dev_data( prod_race_jockey_id_data, dev_race_jockey_id_data )
-    jockey_id_data = lib.link_prod_dev_data( prod_jockey_id_data, dev_jockey_id_data )
-    
-    id_data = lib.update_id_list_create()
+    race_jockey_id_data = dm.pickle_load( "race_jockey_id_data.pickle" )
+    jockey_id_data = dm.pickle_load( "jockey_id_data.pickle" )
+    update_race_id_data = dm.pickle_load( "update_race_id_list.pickle" )
 
     key_list = []
     url_list = []
 
-    for race_id in id_data["race_id"].keys():
+    for race_id in update_race_id_data:
         if not race_id in race_jockey_id_data:
             url = "https://race.netkeiba.com/race/shutuba.html?race_id=" + race_id
             key_list.append( race_id )
             url_list.append( url )
 
+    update_jockey_id_data = {}
     add_data = lib.thread_scraping( url_list, key_list ).data_get( data_collect )
 
     for k in add_data.keys():
@@ -70,10 +65,10 @@ def main():
         for kk in add_data[k].keys():
             jockey_id = copy.copy( add_data[k][kk] )
             jockey_id_data[jockey_id] = True
+            update_jockey_id_data[jockey_id] = True
 
-    dm.pickle_upload( "race_jockey_id_data.pickle", race_jockey_id_data, prod = True )
+    dm.pickle_upload( "update_jockey_id_list.pickle", list( jockey_id_data.keys() ) )
     dm.pickle_upload( "race_jockey_id_data.pickle", race_jockey_id_data )
-    dm.pickle_upload( "jockey_id_data.pickle", jockey_id_data, prod = True )
     dm.pickle_upload( "jockey_id_data.pickle", jockey_id_data )
 
 if __name__ == "__main__":

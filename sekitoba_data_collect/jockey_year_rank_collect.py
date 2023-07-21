@@ -33,16 +33,14 @@ def data_collect( url ):
     return result
         
 def main():
-    prod_jockey_year_rank_data = dm.pickle_load( "jockey_year_rank_data.pickle", prod = True )
-    dev_jockey_year_rank_data = dm.pickle_load( "jockey_year_rank_data.pickle" )
-    jockey_year_rank_data = lib.link_prod_dev_data( prod_jockey_year_rank_data, dev_jockey_year_rank_data, method = "value_length" )
-
+    jockey_year_rank_data = dm.pickle_load( "jockey_year_rank_data.pickle" )
+    update_jockey_id_list = dm.pickle_load( "update_jockey_id_list.pickle" )
     base_url = "https://db.netkeiba.com/jockey/result/"
-    id_data = lib.update_id_list_create()
+
     url_list = []
     key_list = []
     
-    for jockey_id in id_data["jockey_id"].keys():
+    for jockey_id in update_jockey_id_list:
         url = base_url + jockey_id
         url_list.append( url )
         key_list.append( jockey_id )
@@ -52,7 +50,6 @@ def main():
     for jockey_id in add_data.keys():
         jockey_year_rank_data[jockey_id] = add_data[jockey_id]
     
-    dm.pickle_upload( "jockey_year_rank_data.pickle", jockey_year_rank_data, prod = True )
     dm.pickle_upload( "jockey_year_rank_data.pickle", jockey_year_rank_data )
 
 if __name__ == "__main__":

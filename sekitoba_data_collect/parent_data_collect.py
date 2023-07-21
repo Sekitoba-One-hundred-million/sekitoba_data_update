@@ -62,11 +62,11 @@ def parent_id_get( url ):
 def main():
     parent_id_data = dm.pickle_load( "parent_id_data.pickle" )
 
-    id_data = lib.update_id_list_create()
+    update_horce_id_list = dm.pickle_load( "update_horce_id_list.pickle" )
     url_list = []
     key_list = []
 
-    for horce_id in id_data["horce_id"].keys():
+    for horce_id in update_horce_id_list:
         if not horce_id in parent_id_data:
             url_list.append( "https://db.netkeiba.com/horse/" + horce_id )
             key_list.append( horce_id )
@@ -105,7 +105,6 @@ def main():
     for k in parent_data.keys():
         horce_data_storage[k] = parent_data[k]
     
-    #dm.pickle_upload( "parent_data.pickle", parent_data )
     dm.pickle_upload( "horce_data_storage.pickle", horce_data_storage )
     
 main()
