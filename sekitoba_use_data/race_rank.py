@@ -2,19 +2,11 @@ import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
 def main():
-    prod_race_data_storage = dm.pickle_load( "race_data.pickle", prod = True )
-    dev_race_data_storage = dm.pickle_load( "race_data.pickle" )
-    race_data = lib.link_prod_dev_data( prod_race_data_storage, dev_race_data_storage )
+    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
+    race_rank_data = dm.pickle_load( "race_rank_data.pickle" )
+    race_money_data = dm.pickle_load( "race_money_data.pickle" )
 
-    prod_race_rank_data = dm.pickle_load( "race_rank_data.pickle", prod = True )
-    dev_race_rank_data = dm.pickle_load( "race_rank_data.pickle" )
-    race_rank_data = lib.link_prod_dev_data( prod_race_rank_data, dev_race_rank_data )
-    
-    race_money_data = dm.pickle_load( "race_money_data.pickle", prod = True )
-
-    for k in race_data.keys():
-        race_id = lib.id_get( k )
-
+    for race_id in update_race_id_list:
         if race_id in race_rank_data:
             continue
         
@@ -32,7 +24,6 @@ def main():
 
         race_rank_data[race_id] = race_rank
 
-    dm.pickle_upload( "race_rank_data.pickle", race_rank_data, prod = True )
     dm.pickle_upload( "race_rank_data.pickle", race_rank_data )
 
 if __name__ == "__main__":

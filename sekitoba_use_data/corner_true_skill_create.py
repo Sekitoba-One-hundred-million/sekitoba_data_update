@@ -4,7 +4,6 @@ import sekitoba_data_manage as dm
 import copy
 import datetime
 import trueskill
-from tqdm import tqdm
 
 def main():
     horce_rating_data = {}
@@ -94,7 +93,12 @@ def main():
             
             use_jockey_current_rateing = use_jockey_rateing[jockey_id]
             use_trainer_current_rateing = use_trainer_rateing[trainer_id]
-            rank = cd.rank()
+            rank = 0
+
+            try:
+                rank = int( cd.passing_rank().split( "-" )[0] )
+            except:
+                pass
 
             if rank == 0:
                 continue
@@ -129,7 +133,7 @@ def main():
     for jockey_id in jockey_rating_data.keys():
         prod_result["trainer"][jockey_id] = jockey_rating_data[jockey_id].mu
 
-    dm.pickle_upload( "true_skill_data.pickle", dev_result )
+    dm.pickle_upload( "corner_true_skill_data.pickle", dev_result )
 
 if __name__ == "__main__":
     main()

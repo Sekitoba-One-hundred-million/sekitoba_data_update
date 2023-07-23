@@ -94,12 +94,14 @@ def main():
             
             use_jockey_current_rateing = use_jockey_rateing[jockey_id]
             use_trainer_current_rateing = use_trainer_rateing[trainer_id]
-            rank = cd.rank()
+            first_passing_rank = -1
 
-            if rank == 0:
+            try:
+                first_passing_rank = int( cd.passing_rank().split( "-" )[0] )
+            except:
                 continue
 
-            rank_list.append( int( rank - 1 ) )
+            rank_list.append( int( first_passing_rank - 1 ) )
             use_horce_id_list.append( horce_id )
             use_jockey_id_list.append( jockey_id )
             use_trainer_id_list.append( trainer_id )
@@ -107,6 +109,7 @@ def main():
             dev_result["jockey"][race_id][jockey_id] = use_jockey_current_rateing.mu
             dev_result["trainer"][race_id][trainer_id] = use_trainer_current_rateing.mu
             rating_list.append( ( copy.deepcopy( horce_current_rating ), copy.deepcopy( jockey_current_rating ), copy.deepcopy( trainer_current_rating ) ) )
+            print( horce_current_rating.mu, use_jockey_current_rateing.mu, use_trainer_current_rateing.mu )
 
         if len( use_horce_id_list ) < 2:
             continue
@@ -129,7 +132,7 @@ def main():
     for jockey_id in jockey_rating_data.keys():
         prod_result["trainer"][jockey_id] = jockey_rating_data[jockey_id].mu
 
-    dm.pickle_upload( "true_skill_data.pickle", dev_result )
+    dm.pickle_upload( "first_passing_true_skill_data.pickle", dev_result )
 
 if __name__ == "__main__":
     main()

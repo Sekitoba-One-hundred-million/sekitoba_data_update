@@ -1,14 +1,6 @@
-./file_check.sh
+file_check_log=`./file_check.sh`
 
-exit 0
-
-while read line
-do
-    echo start $line
-    process=`python $line`
-
-    if [ ! $? -eq 0 ]; then
-        echo $process
-        exit 1
-    fi
-done < process.txt
+if [ ! $? -eq 0 ]; then
+    echo ${file_check_log}
+   exit 1
+fi

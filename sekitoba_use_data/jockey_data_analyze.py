@@ -1,5 +1,3 @@
-from tqdm import tqdm
-
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -7,7 +5,7 @@ def main():
     result = {}
     jockey_full_data = dm.pickle_load( "jockey_full_data.pickle" )
 
-    for jockey_id in tqdm( jockey_full_data.keys() ):
+    for jockey_id in jockey_full_data.keys():
         result[jockey_id] = {}
 
         for str_day in jockey_full_data[jockey_id].keys():
@@ -44,7 +42,6 @@ def main():
                     result[jockey_id][year][check_key][data_key]["rank"] /= result[jockey_id][year][check_key][data_key]["count"]
                     result[jockey_id][year][check_key][data_key]["rank"] = int( result[jockey_id][year][check_key][data_key]["rank"] )
 
-    dm.pickle_upload( "jockey_analyze_data.pickle", result, prod = True )
     dm.pickle_upload( "jockey_analyze_data.pickle", result )
 
 if __name__ == "__main__":

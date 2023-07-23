@@ -1,14 +1,11 @@
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
-dm.dl.file_set( "race_data.pickle" )
-dm.dl.file_set( "wrap_data.pickle" )
-
 def main():
     result = {}
     check_data = {}
-    race_data = dm.dl.data_get( "race_data.pickle" )
-    wrap_data = dm.dl.data_get( "wrap_data.pickle" )
+    race_data = dm.pickle_load( "race_data.pickle" )
+    wrap_data = dm.pickle_load( "wrap_data.pickle" )
 
     for k in race_data.keys():
         race_id = lib.id_get( k )

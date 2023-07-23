@@ -9,15 +9,14 @@ def main():
     key_data["cource"] = [ "坂", "芝", "W", "C", "ポP", "ダD" ]
     key_data["load"] = [ "一杯", "馬也", "強め", "Ｇ強", "Ｇ一", "仕掛", "直一", "直強" ]
 
-    race_data = dm.pickle_load( "race_data.pickle", prod = True )
-    train_time_data = dm.pickle_load( "train_time_data.pickle", prod = True )
-    horce_data = dm.pickle_load( "horce_data_storage.pickle", prod = True )
+    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
+    train_time_data = dm.pickle_load( "train_time_data.pickle" )
+    horce_data = dm.pickle_load( "horce_data_storage.pickle" )
 
     # place -> cource -> load
     result = {}
     
-    for k in race_data.keys():
-        race_id = lib.id_get( k )
+    for race_id in update_race_id_list:
         year = race_id[0:4]
         race_place_num = race_id[4:6]
         day = race_id[9]
@@ -90,9 +89,7 @@ def main():
                 result[place][cource][load]["wrap"] /= result[place][cource][load]["count"]
                 result[place][cource][load]["time"] /= result[place][cource][load]["count"]
                 
-    dm.pickle_upload( "train_ave_data.pickle", result, prod = True )
     dm.pickle_upload( "train_ave_data.pickle", result )
-    dm.pickle_upload( "train_ave_key_data.pickle", key_data, prod = True )
     dm.pickle_upload( "train_ave_key_data.pickle", key_data )
 
 if __name__ == "__main__":

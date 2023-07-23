@@ -45,8 +45,6 @@ def data_collect( url ):
 def main():
     race_trainer_id_data = dm.pickle_load( "race_trainer_id_data.pickle" )
     trainer_id_data = dm.pickle_load( "trainer_id_data.pickle" )
-
-
     update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
     key_list = []
     url_list = []
@@ -56,6 +54,7 @@ def main():
         key_list.append( race_id )
         url_list.append( url )
 
+    update_trainer_id_data = {}
     add_data = lib.thread_scraping( url_list, key_list ).data_get( data_collect )
 
     for k in add_data.keys():
@@ -64,7 +63,9 @@ def main():
         for kk in add_data[k].keys():
             trainer_id = copy.copy( add_data[k][kk] )
             trainer_id_data[trainer_id] = True
+            update_trainer_id_data[trainer_id] = True
 
+    dm.pickle_load( "update_trainer_id_list.pickle", list( update_trainer_id_data.keys() ) )
     dm.pickle_upload( "trainer_id_data.pickle", trainer_id_data )
     dm.pickle_upload( "race_trainer_id_data.pickle", race_trainer_id_data )
 

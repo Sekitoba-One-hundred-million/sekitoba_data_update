@@ -42,7 +42,6 @@ def main():
                     result[trainer_id][year][check_key][data_key]["rank"] /= result[trainer_id][year][check_key][data_key]["count"]
                     result[trainer_id][year][check_key][data_key]["rank"] = int( result[trainer_id][year][check_key][data_key]["rank"] )
 
-    dm.pickle_upload( "trainer_analyze_data.pickle", result,prod = True )
     dm.pickle_upload( "trainer_analyze_data.pickle", result )
 
 if __name__ == "__main__":

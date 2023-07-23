@@ -4,11 +4,9 @@ import sekitoba_data_manage as dm
 def main():
     result = {}
     next_race_data = {}
-    race_data = dm.pickle_load( "race_data.pickle", prod = True )
-    race_day = dm.pickle_load( "race_day.pickle", prod = True )
-    prod_horce_data = dm.pickle_load( "horce_data_storage.pickle", prod = True )
+    race_data = dm.pickle_load( "race_data.pickle" )
+    race_day = dm.pickle_load( "race_day.pickle" )
     horce_data = dm.pickle_load( "horce_data_storage.pickle" )
-    race_rank_data = dm.pickle_load( "race_rank_data.pickle", prod = True )
 
     for k in race_data.keys():
         race_id = lib.id_get( k )
@@ -35,7 +33,6 @@ def main():
             if not next_cd == None:
                 next_race_data[race_id][horce_id] = next_cd
 
-    dm.pickle_upload( "next_race_data.pickle", next_race_data, prod = True )
     dm.pickle_upload( "next_race_data.pickle", next_race_data )
 
 if __name__ == "__main__":

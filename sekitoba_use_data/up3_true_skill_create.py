@@ -61,6 +61,22 @@ def main():
                 use_jockey_rateing = copy.deepcopy( jockey_rating_data )
                 use_trainer_rateing = copy.deepcopy( trainer_rating_data )
 
+        up3_data = {}
+
+        for kk in race_data[k].keys():
+            horce_id = kk
+            current_data, past_data = lib.race_check( horce_data[horce_id],
+                                                     year, day, num, race_place_num )#今回と過去のデータに分ける
+            cd = lib.current_data( current_data )
+            pd = lib.past_data( past_data, current_data )
+
+            if not cd.race_check():
+                continue
+
+            up3_data[horce_id] = cd.up_time()
+
+        sort_up3_list = sorted( up3_data.values() )
+
         for kk in race_data[k].keys():
             horce_id = kk
             current_data, past_data = lib.race_check( horce_data[horce_id],
@@ -94,10 +110,7 @@ def main():
             
             use_jockey_current_rateing = use_jockey_rateing[jockey_id]
             use_trainer_current_rateing = use_trainer_rateing[trainer_id]
-            rank = cd.rank()
-
-            if rank == 0:
-                continue
+            rank = sort_up3_list.index( up3_data[horce_id] )
 
             rank_list.append( int( rank - 1 ) )
             use_horce_id_list.append( horce_id )
@@ -129,7 +142,7 @@ def main():
     for jockey_id in jockey_rating_data.keys():
         prod_result["trainer"][jockey_id] = jockey_rating_data[jockey_id].mu
 
-    dm.pickle_upload( "true_skill_data.pickle", dev_result )
+    dm.pickle_upload( "up3_true_skill_data.pickle", dev_result )
 
 if __name__ == "__main__":
     main()
