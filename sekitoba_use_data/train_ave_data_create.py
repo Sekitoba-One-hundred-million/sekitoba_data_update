@@ -9,14 +9,15 @@ def main():
     key_data["cource"] = [ "坂", "芝", "W", "C", "ポP", "ダD" ]
     key_data["load"] = [ "一杯", "馬也", "強め", "Ｇ強", "Ｇ一", "仕掛", "直一", "直強" ]
 
-    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
+    race_data = dm.pickle_load( "race_data.pickle" )
     train_time_data = dm.pickle_load( "train_time_data.pickle" )
     horce_data = dm.pickle_load( "horce_data_storage.pickle" )
 
     # place -> cource -> load
     result = {}
     
-    for race_id in update_race_id_list:
+    for k in race_data.keys():
+        race_id = lib.id_get( k )
         year = race_id[0:4]
         race_place_num = race_id[4:6]
         day = race_id[9]

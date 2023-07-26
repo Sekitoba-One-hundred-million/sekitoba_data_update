@@ -1,7 +1,3 @@
-import os
-import numpy as np
-from tqdm import tqdm
-
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -12,7 +8,7 @@ def main():
     horce_data = dm.pickle_load( "horce_data_storage.pickle" )
     true_skill_data = dm.pickle_load( "true_skill_data.pickle" )
     
-    for k in tqdm( race_data.keys() ):
+    for k in race_data.keys():
         race_id = lib.id_get( k )
         year = race_id[0:4]
         race_place_num = race_id[4:6]

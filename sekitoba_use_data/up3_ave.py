@@ -1,16 +1,13 @@
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
-from tqdm import tqdm
-import matplotlib.pyplot as plt
-
 def main():
     up_data = {}
     race_data = dm.pickle_load( "race_data.pickle" )
     race_info = dm.pickle_load( "race_info_data.pickle" )
     horce_data = dm.pickle_load( "horce_data_storage.pickle" )
     
-    for k in tqdm( race_data.keys() ):
+    for k in race_data.keys():
         race_id = lib.id_get( k )
         year = race_id[0:4]
         race_place_num = race_id[4:6]

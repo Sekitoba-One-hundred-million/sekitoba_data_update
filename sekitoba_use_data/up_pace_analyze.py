@@ -1,7 +1,3 @@
-import math
-from tqdm import tqdm
-import matplotlib.pyplot as plt
-
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -11,7 +7,7 @@ def analyze( race_data ):
     result = {}
     finish_horce = {}
 
-    for k in tqdm( race_data.keys() ):
+    for k in race_data.keys():
         race_id = lib.id_get( k )
         year = race_id[0:4]
         race_place_num = race_id[4:6]

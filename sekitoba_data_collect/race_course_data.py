@@ -43,8 +43,6 @@ def main():
     key_data = []
 
     for race_id in update_race_id_data:
-        race_id = lib.id_get( k )
-
         if race_id in result:
             continue
         

@@ -1,6 +1,3 @@
-import math
-from tqdm import tqdm
-
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -8,7 +5,7 @@ def main():
     result = {}
     corner_rank = dm.pickle_load( "corner_rank_data.pickle" )
 
-    for race_id in tqdm( corner_rank.keys() ):
+    for race_id in corner_rank.keys():
         if len( corner_rank[race_id] ) == 0:
             continue
 

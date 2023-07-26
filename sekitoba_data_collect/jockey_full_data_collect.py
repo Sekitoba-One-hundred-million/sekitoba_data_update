@@ -1,4 +1,4 @@
-from tqdm import tqdm
+import datetime
 from bs4 import BeautifulSoup
 
 import sekitoba_library as lib

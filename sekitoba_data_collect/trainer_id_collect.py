@@ -65,7 +65,7 @@ def main():
             trainer_id_data[trainer_id] = True
             update_trainer_id_data[trainer_id] = True
 
-    dm.pickle_load( "update_trainer_id_list.pickle", list( update_trainer_id_data.keys() ) )
+    dm.pickle_upload( "update_trainer_id_list.pickle", list( update_trainer_id_data.keys() ) )
     dm.pickle_upload( "trainer_id_data.pickle", trainer_id_data )
     dm.pickle_upload( "race_trainer_id_data.pickle", race_trainer_id_data )
 

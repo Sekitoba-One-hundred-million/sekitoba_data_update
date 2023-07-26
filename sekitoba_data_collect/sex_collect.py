@@ -33,20 +33,19 @@ def data_collect( url ):
 def main():
     horce_sex_data = dm.pickle_load( "horce_sex_data.pickle" )
     update_horce_id_list = dm.pickle_load( "update_horce_id_list.pickle" )
+    base_url = "https://db.netkeiba.com/horse/"
     url_list = []
     key_list = []
 
     for horce_id in update_horce_id_list:
-        if not horce_id in horce_sex_data:
-            url = base_url + horce_id
-            key_list.append( horce_id )
-            url_list.append( url )
+        if horce_id in horce_sex_data:
+            continue
+        
+        url = base_url + horce_id
+        key_list.append( horce_id )
+        url_list.append( url )
 
-    add_data = lib.thread_scraping( url_list, key_list ).data_get( data_collect )
-
-    for k in add_data.keys():
-        horce_sex_data[k] = add_data[k]
-
+    horce_sex_data.update( lib.thread_scraping( url_list, key_list ).data_get( data_collect ) )
     dm.pickle_upload( "horce_sex_data.pickle", horce_sex_data )
 
 main()
