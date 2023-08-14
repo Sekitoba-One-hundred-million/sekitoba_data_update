@@ -53,6 +53,8 @@ def main():
         race_info_data[k] = add_data[k]
 
     for k in race_info_data.keys():
+        race_info_data[k]["out_side"] = False
+        
         try:
             race_info_data[k]["out_side"] = rd[k]["out_side"]
         except:
