@@ -19,7 +19,7 @@ def data_collect( data ):
           and "OikiriDataHead" in class_name[0]:
             td_tag = tr.findAll( "td" )
             
-            if not len( td_tag ) == 13:
+            if len( td_tag ) < 13:
                 continue
 
             key = td_tag[1].text
