@@ -72,7 +72,7 @@ def data_get( driver, url ):
     return odds_data
 
 def main():
-    driver = webdriver.Chrome()
+    driver = lib.driver_start()
     result = dm.pickle_load( "wide_odds_data.pickle" )
     update_race_id_data = dm.pickle_load( "update_race_id_list.pickle" )
     

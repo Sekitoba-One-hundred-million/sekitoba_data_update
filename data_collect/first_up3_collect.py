@@ -60,7 +60,7 @@ def main():
     race_data = dm.pickle_load( "race_data.pickle" )
     update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
     
-    driver = webdriver.Chrome()
+    driver = lib.driver_start()
     driver = lib.login( driver )
 
     for race_id in update_race_id_list:

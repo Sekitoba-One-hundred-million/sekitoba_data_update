@@ -3,11 +3,14 @@ from bs4 import BeautifulSoup
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
-def data_collect( base_url ):
-    result = {}
+def data_collect( base_url, result ):
     count = 1
+    finish = False
     
     while 1:
+        if finish:
+            break
+
         url = base_url + str( count )
         r,_  = lib.request( url )
         soup = BeautifulSoup( r.content, "html.parser" )
@@ -24,11 +27,16 @@ def data_collect( base_url ):
                 td_tag = tr.findAll( "td" )
                 key_day = td_tag[0].text
                 key_race_num = td_tag[3].text
+
                 try:
                     horce_id = td_tag[12].find( "a" ).get( "href" ).replace( "horse", "" ).replace( "/", "" )
                 except:
                     horce_id = ""
-                    
+
+                if key_day in result and key_race_num in result[key_day]:
+                    finish = True
+                    break
+                
                 lib.dic_append( result, key_day, {} )
                 lib.dic_append( result[key_day], key_race_num, {} )
                 result[key_day][key_race_num]["place"] = td_tag[1].text
@@ -64,8 +72,9 @@ def main():
         url = base_url + trainer_id + "&page="
         url_list.append( url )
         key_list.append( trainer_id )
+        lib.dic_append( result, trainer_id, {} )
+        result[trainer_id] = data_collect( base_url, result[trainer_id] )
 
-    result.update( lib.thread_scraping( url_list, key_list ).data_get( data_collect ) )
     dm.pickle_upload( "trainer_full_data.pickle", result )
 
 if __name__ == "__main__":

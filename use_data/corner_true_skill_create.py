@@ -134,6 +134,7 @@ def main():
         prod_result["trainer"][jockey_id] = jockey_rating_data[jockey_id].mu
 
     dm.pickle_upload( "corner_true_skill_data.pickle", dev_result )
+    dm.pickle_upload( "corner_true_skill_prod_data.pickle", prod_result )
 
 if __name__ == "__main__":
     main()

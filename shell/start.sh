@@ -1,14 +1,6 @@
 ## !/bin/bash
 
-start_list='data/start_list.txt'
-process='process.txt'
-
-file_check_log=`./file_check.sh`
-
-if [ ! $? -eq 0 ]; then
-    echo ${file_check_log}
-    exit 1
-fi
+. ./shell/func.sh
 
 if [ ! -f ${process} ]; then
     touch ${process}
@@ -17,21 +9,21 @@ fi
 status=0
 
 # スタートする前に抜けがないかを確認
-for data in `find sekitoba_data_collect/*.py`; do
+for data in `find ${data_collect_path}/*.py | awk -F '/' '{ print $NF }'`; do
     grep -q ${data} ${start_list}
-
+    
     if [ ! $? -eq 0 ]; then
         status=1
-        echo not found start_list ${data}
+        echo not found start_list ${data_collect}/${data}
     fi
 done
 
-for data in `find sekitoba_use_data/*.py`; do
+for data in `find ${use_data_path}/*.py | awk -F '/' '{ print $NF }'`; do
     grep -q ${data} ${start_list}
 
     if [ ! $? -eq 0 ]; then
         status=1
-        echo not found start_list ${data}
+        echo not found start_list ${use_data}/${data}
     fi
 done
 

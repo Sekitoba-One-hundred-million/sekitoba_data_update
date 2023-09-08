@@ -7,8 +7,6 @@ from selenium import webdriver
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
-# 2023 03 02 06 01
-
 def is_biz_day( date ):    
     if date.weekday() >= 5 or jpholiday.is_holiday( date ):
         return True
@@ -18,8 +16,9 @@ def is_biz_day( date ):
 def race_id_get( driver, url ):
     race_id_list = []
     year = url.split( "kaisai_date=" )[-1][0:4]
-    driver = webdriver.Chrome()
+    driver = lib.driver_start()
     driver, _ = lib.driver_request( driver, url )
+    time.sleep( 10 )
     html = driver.page_source.encode('utf-8')
     soup = BeautifulSoup( html, "html.parser" )
     p_tag = soup.findAll( "p" )
@@ -48,7 +47,7 @@ def race_id_get( driver, url ):
 def main():
     result = []
     race_data = dm.pickle_load( "race_data.pickle" )
-    driver = webdriver.Chrome()
+    driver = lib.driver_start()
     today_date = datetime.datetime.today()
     day_count = 0
 

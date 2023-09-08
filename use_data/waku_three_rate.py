@@ -1,7 +1,6 @@
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
-from tqdm import tqdm
 import matplotlib.pyplot as plt
 
 PLACE_DIST = "place_dist"
@@ -16,7 +15,7 @@ def main():
     race_money_data = dm.pickle_load( "race_money_data.pickle" )
     key_list = [ "place", "dist", "limb", "baba", "kind" ]
     
-    for k in tqdm( race_data.keys() ):
+    for k in race_data.keys():
         race_id = lib.id_get( k )
         year = race_id[0:4]
         race_place_num = race_id[4:6]

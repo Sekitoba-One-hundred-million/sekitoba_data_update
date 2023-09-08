@@ -6,14 +6,16 @@ version=`cat ${sekitoba_update_home}/version`
 version_manage='version-manage'
 data_collect='data_collect'
 use_data='use_data'
+config_path="${sekitoba_update_home}/config"
 version_manage_path="${sekitoba_update_home}/${version_manage}"
-#sekitoba_data_collect_path="${sekitoba_update_home}/sekitoba_data_collect"
-#sekitoba_use_data_path="${sekitoba_update_home}/sekitoba_use_data"
 data_collect_path="${sekitoba_update_home}/data_collect"
 use_data_path="${sekitoba_update_home}/use_data"
+start_list="${config_path}/start_list.txt"
+process="${sekitoba_update_home}/process.txt"
 
 pickle_info="${version_manage_path}/data/pickle_info.txt"
 git_commit="${version_manage_path}/data/git-commit.txt"
+exclusion="${config_path}/exclusion.txt"
 
 function git_clone {
     repogitory=$1
