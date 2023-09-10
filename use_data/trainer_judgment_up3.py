@@ -108,7 +108,7 @@ def main():
                 trainer_judgment[trainer_id][param][data] = trainer_judgment[trainer_id][param][data]["score"] / trainer_judgment[trainer_id][param][data]["count"]
 
     dm.pickle_upload( "trainer_judgment_up3_data.pickle", dev_result )
-    dm.pickle_upload( "trainer_judgment_prod_data.pickle", trainer_judgment )
+    dm.pickle_upload( "trainer_judgment_up3_prod_data.pickle", trainer_judgment )
 
 if __name__ == "__main__":
     main()
