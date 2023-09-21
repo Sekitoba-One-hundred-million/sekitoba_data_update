@@ -109,7 +109,6 @@ def main():
             dev_result["jockey"][race_id][jockey_id] = use_jockey_current_rateing.mu
             dev_result["trainer"][race_id][trainer_id] = use_trainer_current_rateing.mu
             rating_list.append( ( copy.deepcopy( horce_current_rating ), copy.deepcopy( jockey_current_rating ), copy.deepcopy( trainer_current_rating ) ) )
-            print( horce_current_rating.mu, use_jockey_current_rateing.mu, use_trainer_current_rateing.mu )
 
         if len( use_horce_id_list ) < 2:
             continue
@@ -129,8 +128,8 @@ def main():
     for jockey_id in jockey_rating_data.keys():
         prod_result["jockey"][jockey_id] = jockey_rating_data[jockey_id].mu
 
-    for jockey_id in jockey_rating_data.keys():
-        prod_result["trainer"][jockey_id] = jockey_rating_data[jockey_id].mu
+    for trainer_id in trainer_rating_data.keys():
+        prod_result["trainer"][trainer_id] = trainer_rating_data[trainer_id].mu
 
     dm.pickle_upload( "first_passing_true_skill_data.pickle", dev_result )
     dm.pickle_upload( "first_passing_true_skill_prod_data.pickle", prod_result )

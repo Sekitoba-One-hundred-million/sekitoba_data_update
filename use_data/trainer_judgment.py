@@ -36,6 +36,9 @@ def main():
         day = race_id[9]
         num = race_id[7]
 
+        if race_id == "202306040508":
+            break
+
         dev_result[race_id] = {}
         trainer_id_list = race_trainer_id_data[race_id]
 

@@ -130,8 +130,8 @@ def main():
     for jockey_id in jockey_rating_data.keys():
         prod_result["jockey"][jockey_id] = jockey_rating_data[jockey_id].mu
 
-    for jockey_id in jockey_rating_data.keys():
-        prod_result["trainer"][jockey_id] = jockey_rating_data[jockey_id].mu
+    for trainer_id in trainer_rating_data.keys():
+        prod_result["trainer"][trainer_id] = trainer_rating_data[trainer_id].mu
 
     dm.pickle_upload( "corner_true_skill_data.pickle", dev_result )
     dm.pickle_upload( "corner_true_skill_prod_data.pickle", prod_result )
