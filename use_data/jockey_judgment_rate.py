@@ -36,9 +36,6 @@ def main():
         day = race_id[9]
         num = race_id[7]
 
-        if race_id == "202306040508":
-            break
-
         dev_result[race_id] = {}
         jockey_id_list = race_jockey_id_data[race_id]
         rank_list = []
@@ -158,7 +155,7 @@ def main():
                 for key in use_jockey_judgment[jockey_id][param][data].keys():
                     jockey_judgment[jockey_id][param][data][key] = use_jockey_judgment[jockey_id][param][data][key] / count
 
-    #dm.pickle_upload( "jockey_judgment_rate_data.pickle", dev_result )
+    dm.pickle_upload( "jockey_judgment_rate_data.pickle", dev_result )
     dm.pickle_upload( "jockey_judgment_rate_prod_data.pickle", jockey_judgment )
 
 if __name__ == "__main__":

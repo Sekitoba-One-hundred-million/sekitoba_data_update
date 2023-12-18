@@ -33,9 +33,6 @@ def main():
         k = std["k"]
         race_id = lib.id_get( k )
 
-        if race_id == "202306040508":
-            break
-
         if not race_id in race_money_data:
             continue
         

@@ -105,6 +105,7 @@ def main():
             use_horce_id_list.append( horce_id )
             use_jockey_id_list.append( jockey_id )
             use_trainer_id_list.append( trainer_id )
+
             dev_result["horce"][race_id][horce_id] = horce_current_rating.mu
             dev_result["jockey"][race_id][jockey_id] = use_jockey_current_rateing.mu
             dev_result["trainer"][race_id][trainer_id] = use_trainer_current_rateing.mu
