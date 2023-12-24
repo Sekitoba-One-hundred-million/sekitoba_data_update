@@ -12,7 +12,7 @@ def main():
     horce_data = dm.pickle_load( "horce_data_storage.pickle" )
     race_day = dm.pickle_load( "race_day.pickle" )
     race_jockey_id_data = dm.pickle_load( "race_jockey_id_data.pickle" )
-    up3_ave_data = dm.pickle_load( "up3_ave_data.pickle" )
+    up3_analyze_data = dm.pickle_load( "up3_analyze_data.pickle" )
     sort_time_data = []
     param_list = [ "limb", "popular", "flame_num", "dist", "kind", "baba", "place", "limb_count", "escape_count" ]
 
@@ -87,13 +87,14 @@ def main():
             if not horce_id in jockey_id_list:
                 continue
 
-
+            limb_math = limb_dict[horce_id]
             key_place = str( int( cd.place() ) )
             key_kind = str( int( cd.race_kind() ) )
             key_dist_kind = str( int( cd.dist_kind() ) )
+            key_limb = str( int( limb_math ) )
 
             try:
-                ave_up3 = up3_ave_data[key_place][key_kind][key_dist_kind]
+                ave_up3 = up3_analyze_data[key_place][key_kind][key_dist_kind][key_limb]["ave"]
             except:
                 continue
 
@@ -105,7 +106,6 @@ def main():
                 rate_key = "2"
             
             jockey_id = jockey_id_list[horce_id]
-            limb_math = limb_dict[horce_id]
 
             key_data = {}
             key_data["limb"] = str( int( limb_math ) )

@@ -102,14 +102,16 @@ def main():
 
                 trainer_judgment[trainer_id][param][key_data[param]]["count"] += 1
                 trainer_judgment[trainer_id][param][key_data[param]]["score"] += first_passing_rank
-            
-    for trainer_id in trainer_judgment.keys():
-        for param in trainer_judgment[trainer_id].keys():
-            for data in trainer_judgment[trainer_id][param].keys():
-                trainer_judgment[trainer_id][param][data] = trainer_judgment[trainer_id][param][data]["score"] / trainer_judgment[trainer_id][param][data]["count"]
 
-    dm.pickle_upload( "trainer_judgment_data.pickle", dev_result )
-    #dm.pickle_upload( "trainer_judgment_prod_data.pickle", trainer_judgment )
+        if race_id == "202306040508":
+            break
+
+    for trainer_id in use_trainer_judgment.keys():
+        for param in use_trainer_judgment[trainer_id].keys():
+            for data in use_trainer_judgment[trainer_id][param].keys():
+                use_trainer_judgment[trainer_id][param][data] = use_trainer_judgment[trainer_id][param][data]["score"] / use_trainer_judgment[trainer_id][param][data]["count"]
+
+    dm.pickle_upload( "trainer_judgment_prod_data.pickle", use_trainer_judgment )
 
 if __name__ == "__main__":
     main()

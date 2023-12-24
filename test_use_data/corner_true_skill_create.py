@@ -4,7 +4,6 @@ import sekitoba_data_manage as dm
 import copy
 import datetime
 import trueskill
-from tqdm import tqdm
 
 def main():
     horce_rating_data = {}
@@ -94,7 +93,12 @@ def main():
             
             use_jockey_current_rateing = use_jockey_rateing[jockey_id]
             use_trainer_current_rateing = use_trainer_rateing[trainer_id]
-            rank = cd.rank()
+            rank = 0
+
+            try:
+                rank = int( cd.passing_rank().split( "-" )[0] )
+            except:
+                pass
 
             if rank == 0:
                 continue
@@ -107,10 +111,13 @@ def main():
             dev_result["jockey"][race_id][jockey_id] = use_jockey_current_rateing.mu
             dev_result["trainer"][race_id][trainer_id] = use_trainer_current_rateing.mu
             rating_list.append( ( copy.deepcopy( horce_current_rating ), copy.deepcopy( jockey_current_rating ), copy.deepcopy( trainer_current_rating ) ) )
-            
+
         if len( use_horce_id_list ) < 2:
             continue
 
+        if race_id == "202306040508":
+            break
+        
         next_rating_list = env.rate( rating_list, ranks=rank_list )
 
         for i in range( 0, len( next_rating_list ) ):
@@ -124,13 +131,14 @@ def main():
         prod_result["horce"][horce_id] = horce_rating_data[horce_id].mu
 
     for jockey_id in jockey_rating_data.keys():
-        prod_result["jockey"][jockey_id] = jockey_rating_data[jockey_id].mu
+        #prod_result["jockey"][jockey_id] = jockey_rating_data[jockey_id].mu
+        prod_result["jockey"][jockey_id] = use_jockey_rateing[jockey_id].mu
 
     for trainer_id in trainer_rating_data.keys():
-        prod_result["trainer"][trainer_id] = trainer_rating_data[trainer_id].mu
+        prod_result["trainer"][trainer_id] = use_trainer_rateing[trainer_id].mu
 
-    dm.pickle_upload( "true_skill_data.pickle", dev_result )
-    dm.pickle_upload( "true_skill_prod_data.pickle", prod_result )
+    #dm.pickle_upload( "corner_true_skill_data.pickle", dev_result )
+    dm.pickle_upload( "corner_true_skill_prod_data.pickle", prod_result )
 
 if __name__ == "__main__":
     main()

@@ -31,6 +31,10 @@ def main():
     for i, std in enumerate( sort_time_data ):
         k = std["k"]
         race_id = lib.id_get( k )
+        
+        if race_id == "202306040508":
+            break
+
         year = race_id[0:4]
         race_place_num = race_id[4:6]
         day = race_id[9]
@@ -130,9 +134,9 @@ def main():
                 score_data = {}
 
                 if jockey_id in use_jockey_judgment and \
-                param in use_jockey_judgment[jockey_id] and \
-                key_data[param] in use_jockey_judgment[jockey_id][param] and \
-                not use_jockey_judgment[jockey_id][param][key_data[param]]["count"] == 0:
+                  param in use_jockey_judgment[jockey_id] and \
+                  key_data[param] in use_jockey_judgment[jockey_id][param] and \
+                  not use_jockey_judgment[jockey_id][param][key_data[param]]["count"] == 0:
                     for r in [ "0", "1", "2" ]:
                         score_data[r] = use_jockey_judgment[jockey_id][param][key_data[param]][r] / use_jockey_judgment[jockey_id][param][key_data[param]]["count"]
                     
@@ -141,15 +145,14 @@ def main():
                 jockey_judgment[jockey_id][param][key_data[param]]["count"] += 1
                 jockey_judgment[jockey_id][param][key_data[param]][key_first_passing_class] += 1
             
-    for jockey_id in jockey_judgment.keys():
-        for param in jockey_judgment[jockey_id].keys():
-            for data in jockey_judgment[jockey_id][param].keys():
-                count = jockey_judgment[jockey_id][param][data]["count"]
-                for key in jockey_judgment[jockey_id][param][data].keys():
-                    jockey_judgment[jockey_id][param][data][key] = jockey_judgment[jockey_id][param][data][key] / count
+    for jockey_id in use_jockey_judgment.keys():
+        for param in use_jockey_judgment[jockey_id].keys():
+            for data in use_jockey_judgment[jockey_id][param].keys():
+                count = use_jockey_judgment[jockey_id][param][data]["count"]
+                for key in use_jockey_judgment[jockey_id][param][data].keys():
+                    use_jockey_judgment[jockey_id][param][data][key] = use_jockey_judgment[jockey_id][param][data][key] / count
 
-    dm.pickle_upload( "jockey_judgment_rate_data.pickle", dev_result )
-    dm.pickle_upload( "jockey_judgment_rate_prod_data.pickle", jockey_judgment )
+    dm.pickle_upload( "jockey_judgment_rate_prod_data.pickle", use_jockey_judgment )
 
 if __name__ == "__main__":
     main()

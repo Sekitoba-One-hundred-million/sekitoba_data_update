@@ -111,6 +111,9 @@ def main():
         if len( use_horce_id_list ) < 2:
             continue
 
+        if race_id == "202306040508":
+            break
+        
         next_rating_list = env.rate( rating_list, ranks=rank_list )
 
         for i in range( 0, len( next_rating_list ) ):
@@ -124,12 +127,12 @@ def main():
         prod_result["horce"][horce_id] = horce_rating_data[horce_id].mu
 
     for jockey_id in jockey_rating_data.keys():
-        prod_result["jockey"][jockey_id] = jockey_rating_data[jockey_id].mu
+        prod_result["jockey"][jockey_id] = use_jockey_rateing[jockey_id].mu
 
     for trainer_id in trainer_rating_data.keys():
-        prod_result["trainer"][trainer_id] = trainer_rating_data[trainer_id].mu
+        prod_result["trainer"][trainer_id] = use_trainer_rateing[trainer_id].mu
 
-    dm.pickle_upload( "true_skill_data.pickle", dev_result )
+    #dm.pickle_upload( "true_skill_data.pickle", dev_result )
     dm.pickle_upload( "true_skill_prod_data.pickle", prod_result )
 
 if __name__ == "__main__":

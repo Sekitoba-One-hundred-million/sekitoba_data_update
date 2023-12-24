@@ -11,8 +11,8 @@ def main():
     race_data = dm.pickle_load( "race_data.pickle" )
     horce_data = dm.pickle_load( "horce_data_storage.pickle" )
     race_day = dm.pickle_load( "race_day.pickle" )
-    race_money_data = dm.pickle_load( "race_money_data.pickle" )
     race_jockey_id_data = dm.pickle_load( "race_jockey_id_data.pickle" )
+    up3_analyze_data = dm.pickle_load( "up3_analyze_data.pickle" )
     sort_time_data = []
     param_list = [ "limb", "popular", "flame_num", "dist", "kind", "baba", "place", "limb_count", "escape_count" ]
 
@@ -87,23 +87,24 @@ def main():
             if not horce_id in jockey_id_list:
                 continue
 
-            first_passing_rank = -1
+            limb_math = limb_dict[horce_id]
+            key_place = str( int( cd.place() ) )
+            key_kind = str( int( cd.race_kind() ) )
+            key_dist_kind = str( int( cd.dist_kind() ) )
+            key_limb = str( int( limb_math ) )
 
             try:
-                first_passing_rank = int( cd.passing_rank().split( "-" )[0] )
+                ave_up3 = up3_analyze_data[key_place][key_kind][key_dist_kind][key_limb]["ave"]
             except:
                 continue
 
-            before_rank = -1
-            before_cd = pd.before_cd()
-
-            if not before_cd == None:
-                before_rank = before_cd.rank()
-
-            first_passing_class = min( int( first_passing_rank / int( cd.all_horce_num() / 3 ) ), 2 )
-            key_first_passing_class = str( first_passing_class )
+            rate_key = "0"
+            if ave_up3 - cd.up_time() < -0.5:
+                rate_key = "1"
+            elif 0.5 < ave_up3 - cd.up_time():
+                rate_key = "2"
+            
             jockey_id = jockey_id_list[horce_id]
-            limb_math = limb_dict[horce_id]
 
             key_data = {}
             key_data["limb"] = str( int( limb_math ) )
@@ -124,7 +125,7 @@ def main():
             for param in param_list:
                 lib.dic_append( jockey_judgment[jockey_id], param, {} )                
                 lib.dic_append( jockey_judgment[jockey_id][param], key_data[param], { "0": 0, "1": 0, "2": 0, "count": 0 } )
-                jockey_judgment[jockey_id][param][key_data[param]][key_first_passing_class] += 1
+                jockey_judgment[jockey_id][param][key_data[param]][rate_key] += 1
                 jockey_judgment[jockey_id][param][key_data[param]]["count"] += 1
                 
                 score_data = {}
@@ -139,17 +140,19 @@ def main():
                 dev_result[race_id][horce_id][param] = score_data
 
                 jockey_judgment[jockey_id][param][key_data[param]]["count"] += 1
-                jockey_judgment[jockey_id][param][key_data[param]][key_first_passing_class] += 1
+                jockey_judgment[jockey_id][param][key_data[param]][rate_key] += 1
             
-    for jockey_id in jockey_judgment.keys():
-        for param in jockey_judgment[jockey_id].keys():
-            for data in jockey_judgment[jockey_id][param].keys():
-                count = jockey_judgment[jockey_id][param][data]["count"]
-                for key in jockey_judgment[jockey_id][param][data].keys():
-                    jockey_judgment[jockey_id][param][data][key] = jockey_judgment[jockey_id][param][data][key] / count
+        if race_id == "202306040508":
+            break
+            
+    for jockey_id in use_jockey_judgment.keys():
+        for param in use_jockey_judgment[jockey_id].keys():
+            for data in use_jockey_judgment[jockey_id][param].keys():
+                count = use_jockey_judgment[jockey_id][param][data]["count"]
+                for key in use_jockey_judgment[jockey_id][param][data].keys():
+                    use_jockey_judgment[jockey_id][param][data][key] = use_jockey_judgment[jockey_id][param][data][key] / count
 
-    dm.pickle_upload( "jockey_judgment_rate_data.pickle", dev_result )
-    dm.pickle_upload( "jockey_judgment_rate_prod_data.pickle", jockey_judgment )
+    dm.pickle_upload( "jockey_judgment_up3_rate_prod_data.pickle", use_jockey_judgment )
 
 if __name__ == "__main__":
     main()

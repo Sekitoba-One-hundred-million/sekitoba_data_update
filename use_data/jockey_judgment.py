@@ -148,11 +148,6 @@ def main():
             for data in jockey_judgment[jockey_id][param].keys():
                 jockey_judgment[jockey_id][param][data] = jockey_judgment[jockey_id][param][data]["score"] / jockey_judgment[jockey_id][param][data]["count"]
 
-    for jockey_id in use_jockey_judgment.keys():
-        for param in use_jockey_judgment[jockey_id].keys():
-            for data in use_jockey_judgment[jockey_id][param].keys():
-                jockey_judgment[jockey_id][param][data] = use_jockey_judgment[jockey_id][param][data]["score"] / use_jockey_judgment[jockey_id][param][data]["count"]
-
     dm.pickle_upload( "jockey_judgment_data.pickle", dev_result )
     dm.pickle_upload( "jockey_judgment_prod_data.pickle", jockey_judgment )
     

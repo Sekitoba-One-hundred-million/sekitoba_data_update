@@ -4,7 +4,6 @@ import sekitoba_data_manage as dm
 import copy
 import datetime
 import trueskill
-from tqdm import tqdm
 
 def main():
     trainer_judgment = {}
@@ -38,6 +37,10 @@ def main():
 
         dev_result[race_id] = {}
         trainer_id_list = race_trainer_id_data[race_id]
+        rank_list = []
+        rating_list = []
+        use_trainer_id_list = []
+        use_horce_id_list = []
 
         if not i == 0:
             current_timestamp = std["time"]
@@ -67,6 +70,14 @@ def main():
             except:
                 continue
 
+            before_rank = -1
+            before_cd = pd.before_cd()
+
+            if not before_cd == None:
+                before_rank = before_cd.rank()
+
+            first_passing_class = min( int( first_passing_rank / int( cd.all_horce_num() / 3 ) ), 2 )
+            key_first_passing_class = str( first_passing_class )
             trainer_id = trainer_id_list[horce_id]
             limb_math = lib.limb_search( pd )
 
@@ -86,30 +97,35 @@ def main():
             
             for param in param_list:
                 lib.dic_append( trainer_judgment[trainer_id], param, {} )                
-                lib.dic_append( trainer_judgment[trainer_id][param], key_data[param], { "count": 0, "score" : 0 } )
-                trainer_judgment[trainer_id][param][key_data[param]]["score"] += first_passing_rank
+                lib.dic_append( trainer_judgment[trainer_id][param], key_data[param], { "0": 0, "1": 0, "2": 0, "count": 0 } )
+                trainer_judgment[trainer_id][param][key_data[param]][key_first_passing_class] += 1
                 trainer_judgment[trainer_id][param][key_data[param]]["count"] += 1
                 
-                score = -1000
+                score_data = {}
 
                 if trainer_id in use_trainer_judgment and \
                 param in use_trainer_judgment[trainer_id] and \
                 key_data[param] in use_trainer_judgment[trainer_id][param] and \
                 not use_trainer_judgment[trainer_id][param][key_data[param]]["count"] == 0:
-                    score = use_trainer_judgment[trainer_id][param][key_data[param]]["score"] / use_trainer_judgment[trainer_id][param][key_data[param]]["count"]
+                    for r in [ "0", "1", "2" ]:
+                        score_data[r] = use_trainer_judgment[trainer_id][param][key_data[param]][r] / use_trainer_judgment[trainer_id][param][key_data[param]]["count"]
                     
-                dev_result[race_id][horce_id][param] = score
+                dev_result[race_id][horce_id][param] = score_data
 
                 trainer_judgment[trainer_id][param][key_data[param]]["count"] += 1
-                trainer_judgment[trainer_id][param][key_data[param]]["score"] += first_passing_rank
-            
-    for trainer_id in trainer_judgment.keys():
-        for param in trainer_judgment[trainer_id].keys():
-            for data in trainer_judgment[trainer_id][param].keys():
-                trainer_judgment[trainer_id][param][data] = trainer_judgment[trainer_id][param][data]["score"] / trainer_judgment[trainer_id][param][data]["count"]
+                trainer_judgment[trainer_id][param][key_data[param]][key_first_passing_class] += 1
 
-    dm.pickle_upload( "trainer_judgment_data.pickle", dev_result )
-    #dm.pickle_upload( "trainer_judgment_prod_data.pickle", trainer_judgment )
+        if race_id == "202306040508":
+            break
+                
+    for trainer_id in use_trainer_judgment.keys():
+        for param in use_trainer_judgment[trainer_id].keys():
+            for data in use_trainer_judgment[trainer_id][param].keys():
+                count = use_trainer_judgment[trainer_id][param][data]["count"]
+                for key in use_trainer_judgment[trainer_id][param][data].keys():
+                    use_trainer_judgment[trainer_id][param][data][key] = use_trainer_judgment[trainer_id][param][data][key] / count
+
+    dm.pickle_upload( "trainer_judgment_rate_prod_data.pickle", use_trainer_judgment )
 
 if __name__ == "__main__":
     main()

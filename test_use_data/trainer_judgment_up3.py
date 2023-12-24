@@ -4,7 +4,6 @@ import sekitoba_data_manage as dm
 import copy
 import datetime
 import trueskill
-from tqdm import tqdm
 
 def main():
     trainer_judgment = {}
@@ -60,10 +59,10 @@ def main():
             if not horce_id in trainer_id_list:
                 continue
 
-            first_passing_rank = -1
+            up3 = -1
 
             try:
-                first_passing_rank = int( cd.passing_rank().split( "-" )[0] )
+                up3 = cd.up_time()
             except:
                 continue
 
@@ -87,7 +86,7 @@ def main():
             for param in param_list:
                 lib.dic_append( trainer_judgment[trainer_id], param, {} )                
                 lib.dic_append( trainer_judgment[trainer_id][param], key_data[param], { "count": 0, "score" : 0 } )
-                trainer_judgment[trainer_id][param][key_data[param]]["score"] += first_passing_rank
+                trainer_judgment[trainer_id][param][key_data[param]]["score"] += up3
                 trainer_judgment[trainer_id][param][key_data[param]]["count"] += 1
                 
                 score = -1000
@@ -101,15 +100,17 @@ def main():
                 dev_result[race_id][horce_id][param] = score
 
                 trainer_judgment[trainer_id][param][key_data[param]]["count"] += 1
-                trainer_judgment[trainer_id][param][key_data[param]]["score"] += first_passing_rank
-            
-    for trainer_id in trainer_judgment.keys():
-        for param in trainer_judgment[trainer_id].keys():
-            for data in trainer_judgment[trainer_id][param].keys():
-                trainer_judgment[trainer_id][param][data] = trainer_judgment[trainer_id][param][data]["score"] / trainer_judgment[trainer_id][param][data]["count"]
+                trainer_judgment[trainer_id][param][key_data[param]]["score"] += up3
 
-    dm.pickle_upload( "trainer_judgment_data.pickle", dev_result )
-    #dm.pickle_upload( "trainer_judgment_prod_data.pickle", trainer_judgment )
+        if race_id == "202306040508":
+            break
+                
+    for trainer_id in use_trainer_judgment.keys():
+        for param in use_trainer_judgment[trainer_id].keys():
+            for data in use_trainer_judgment[trainer_id][param].keys():
+                use_trainer_judgment[trainer_id][param][data] = use_trainer_judgment[trainer_id][param][data]["score"] / use_trainer_judgment[trainer_id][param][data]["count"]
+
+    dm.pickle_upload( "trainer_judgment_up3_prod_data.pickle", use_trainer_judgment )
 
 if __name__ == "__main__":
     main()
