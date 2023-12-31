@@ -18,7 +18,7 @@ def race_id_get( driver, url ):
     year = url.split( "kaisai_date=" )[-1][0:4]
     driver = lib.driver_start()
     driver, _ = lib.driver_request( driver, url )
-    time.sleep( 10 )
+    time.sleep( 5 )
     html = driver.page_source.encode('utf-8')
     soup = BeautifulSoup( html, "html.parser" )
     p_tag = soup.findAll( "p" )

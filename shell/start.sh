@@ -40,8 +40,6 @@ if [ ! ${status} -eq 0 ]; then
     exit ${status}
 fi
 
-exit 0
-
 # pythonファイルの実行
 for data in `cat ${start_list}`; do
     grep -q ${data} ${process}
