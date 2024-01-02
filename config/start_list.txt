@@ -23,13 +23,14 @@ data_collect/condition_devi_get.py
 use_data/flame_evaluation.py
 use_data/race_rank.py
 use_data/up_kind_ave.py
+use_data/up3_analyze.py
 use_data/true_skill_create.py
 use_data/corner_true_skill_create.py
 use_data/up3_true_skill_create.py
 use_data/first_passing_true_skill_create.py
 use_data/last_passing_true_skill_create.py
 use_data/money_class_true_skill.py
-use_data/race_ave_true_skill.py
+use_data/race_ave_true_skill.p
 use_data/jockey_judgment.py
 use_data/jockey_judgment_up3.py
 use_data/jockey_judgment_rate.py
@@ -50,4 +51,3 @@ use_data/popular_kind_win_rate.py
 use_data/flame_evaluation.py
 use_data/race_time_analyze_data.py
 use_data/stride_ablity_analyze.py
-use_data/up3_analyze.py

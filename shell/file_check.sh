@@ -79,6 +79,4 @@ for file_name in `ls ${use_data}`; do
     fi
 done
 
-rm -rf ${version_manage_path}
-
 exit ${status}

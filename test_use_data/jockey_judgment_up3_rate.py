@@ -131,11 +131,15 @@ def main():
                 score_data = {}
 
                 if jockey_id in use_jockey_judgment and \
-                param in use_jockey_judgment[jockey_id] and \
-                key_data[param] in use_jockey_judgment[jockey_id][param] and \
-                not use_jockey_judgment[jockey_id][param][key_data[param]]["count"] == 0:
+                  param in use_jockey_judgment[jockey_id] and \
+                  key_data[param] in use_jockey_judgment[jockey_id][param] and \
+                  not use_jockey_judgment[jockey_id][param][key_data[param]]["count"] == 0:
                     for r in [ "0", "1", "2" ]:
                         score_data[r] = use_jockey_judgment[jockey_id][param][key_data[param]][r] / use_jockey_judgment[jockey_id][param][key_data[param]]["count"]
+
+                        if race_id == "202306040508":
+                            if param == "limb":
+                                print( horce_id, param, key_data[param], r, score_data[r] )
                     
                 dev_result[race_id][horce_id][param] = score_data
 

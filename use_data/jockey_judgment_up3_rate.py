@@ -99,7 +99,6 @@ def main():
                 continue
 
             rate_key = "0"
-
             if ave_up3 - cd.up_time() < -0.5:
                 rate_key = "1"
             elif 0.5 < ave_up3 - cd.up_time():

@@ -29,3 +29,14 @@ function commit_get {
     repogitory=$1
     cat ${git_commit}| grep ${repogitory} | awk -F ' ' '{ print $2 }'
 }
+
+function not_need_data_remove {
+    rm -rf ${version_manage_path}
+}
+
+function error_log {
+    if [ ! $? -eq 0 ]; then
+        echo $0
+        exit 1
+    fi
+}
