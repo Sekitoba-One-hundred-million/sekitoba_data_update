@@ -36,7 +36,8 @@ function not_need_data_remove {
 
 function error_log {
     if [ ! $? -eq 0 ]; then
-        echo $0
+        echo $1
+        not_need_data_remove
         exit 1
     fi
 }
