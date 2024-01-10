@@ -4,7 +4,6 @@ import sekitoba_data_manage as dm
 import copy
 import datetime
 import trueskill
-from tqdm import tqdm
 
 def main():
     trainer_judgment = {}
@@ -49,8 +48,7 @@ def main():
 
         for kk in race_data[k].keys():
             horce_id = kk
-            current_data, past_data = lib.race_check( horce_data[horce_id],
-                                                     year, day, num, race_place_num )#今回と過去のデータに分ける
+            current_data, past_data = lib.race_check( horce_data[horce_id], race_day[race_id] )
             cd = lib.current_data( current_data )
             pd = lib.past_data( past_data, current_data )
 
@@ -109,7 +107,7 @@ def main():
                 trainer_judgment[trainer_id][param][data] = trainer_judgment[trainer_id][param][data]["score"] / trainer_judgment[trainer_id][param][data]["count"]
 
     dm.pickle_upload( "trainer_judgment_data.pickle", dev_result )
-    #dm.pickle_upload( "trainer_judgment_prod_data.pickle", trainer_judgment )
+    dm.pickle_upload( "trainer_judgment_prod_data.pickle", trainer_judgment )
 
 if __name__ == "__main__":
     main()

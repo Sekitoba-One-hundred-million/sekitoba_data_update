@@ -2,20 +2,16 @@ import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
 import math
-from tqdm import tqdm
 import matplotlib.pyplot as plt
-
-dm.dl.file_set( "race_data.pickle" )
-dm.dl.file_set( "race_info_data.pickle" )
-dm.dl.file_set( "horce_data_storage.pickle" )
 
 def main():
     up_data = {}
-    race_data = dm.dl.data_get( "race_data.pickle" )
-    race_info = dm.dl.data_get( "race_info_data.pickle" )
-    horce_data = dm.dl.data_get( "horce_data_storage.pickle" )
+    race_data = dm.pickle_load( "race_data.pickle" )
+    race_info = dm.pickle_load( "race_info_data.pickle" )
+    horce_data = dm.pickle_load( "horce_data_storage.pickle" )
+    race_day = dm.pickle_load( "race_day.pickle" )
     
-    for k in tqdm( race_data.keys() ):
+    for k in race_data.keys():
         race_id = lib.id_get( k )
         year = race_id[0:4]
         race_place_num = race_id[4:6]
@@ -34,8 +30,7 @@ def main():
 
         for kk in race_data[k].keys():
             horce_id = kk
-            current_data, past_data = lib.race_check( horce_data[horce_id],
-                                                     year, day, num, race_place_num )#今回と過去のデータに分ける
+            current_data, past_data = lib.race_check( horce_data[horce_id], race_day[race_id] )
             cd = lib.current_data( current_data )
             pd = lib.past_data( past_data, current_data )
 

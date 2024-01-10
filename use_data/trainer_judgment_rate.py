@@ -52,8 +52,7 @@ def main():
 
         for kk in race_data[k].keys():
             horce_id = kk
-            current_data, past_data = lib.race_check( horce_data[horce_id],
-                                                     year, day, num, race_place_num )#今回と過去のデータに分ける
+            current_data, past_data = lib.race_check( horce_data[horce_id], race_day[race_id] )
             cd = lib.current_data( current_data )
             pd = lib.past_data( past_data, current_data )
 

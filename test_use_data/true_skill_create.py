@@ -4,7 +4,6 @@ import sekitoba_data_manage as dm
 import copy
 import datetime
 import trueskill
-from tqdm import tqdm
 
 def main():
     horce_rating_data = {}

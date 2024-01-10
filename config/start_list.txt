@@ -20,6 +20,8 @@ data_collect/race_time_collect.py
 data_collect/first_up3_collect.py
 data_collect/time_index_get.py
 data_collect/condition_devi_get.py
+data_collect/predict_netkeiba_deployment.py
+data_collect/predict_netkeiba_pace.py
 use_data/flame_evaluation.py
 use_data/race_rank.py
 use_data/up_kind_ave.py
@@ -30,7 +32,7 @@ use_data/up3_true_skill_create.py
 use_data/first_passing_true_skill_create.py
 use_data/last_passing_true_skill_create.py
 use_data/money_class_true_skill.py
-use_data/race_ave_true_skill.p
+use_data/race_ave_true_skill.py
 use_data/jockey_judgment.py
 use_data/jockey_judgment_up3.py
 use_data/jockey_judgment_rate.py

@@ -9,6 +9,7 @@ def main():
     up_data = { PLACE_DIST: {}, MONEY: {}, BABA: {} }
     race_data = dm.pickle_load( "race_data.pickle" )
     race_info = dm.pickle_load( "race_info_data.pickle" )
+    race_day = dm.pickle_load( "race_day.pickle" )
     horce_data = dm.pickle_load( "horce_data_storage.pickle" )
     race_money_data = dm.pickle_load( "race_money_data.pickle" )
     
@@ -33,8 +34,7 @@ def main():
 
         for kk in race_data[k].keys():
             horce_id = kk
-            current_data, past_data = lib.race_check( horce_data[horce_id],
-                                                     year, day, num, race_place_num )#今回と過去のデータに分ける
+            current_data, past_data = lib.race_check( horce_data[horce_id], race_day[race_id] )
             cd = lib.current_data( current_data )
             pd = lib.past_data( past_data, current_data )
 

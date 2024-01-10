@@ -1,5 +1,3 @@
-from tqdm import tqdm
-
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 

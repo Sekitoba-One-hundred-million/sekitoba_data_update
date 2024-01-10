@@ -1,5 +1,4 @@
 import time
-from tqdm import tqdm
 from bs4 import BeautifulSoup
 from selenium import webdriver
 

@@ -1,4 +1,3 @@
-from tqdm import tqdm
 from bs4 import BeautifulSoup
 
 import sekitoba_library as lib

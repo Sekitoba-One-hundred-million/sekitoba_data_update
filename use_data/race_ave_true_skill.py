@@ -5,6 +5,7 @@ def main():
     result = {}
     race_data = dm.pickle_load( "race_data.pickle" )
     race_info = dm.pickle_load( "race_info_data.pickle" )
+    race_day = dm.pickle_load( "race_day.pickle" )
     horce_data = dm.pickle_load( "horce_data_storage.pickle" )
     true_skill_data = dm.pickle_load( "true_skill_data.pickle" )
     
@@ -32,8 +33,7 @@ def main():
         true_skill_list = []
         
         for horce_id in race_data[k].keys():
-            current_data, past_data = lib.race_check( horce_data[horce_id],
-                                                     year, day, num, race_place_num )#今回と過去のデータに分ける
+            current_data, past_data = lib.race_check( horce_data[horce_id], race_day[race_id] )
             cd = lib.current_data( current_data )
             pd = lib.past_data( past_data, current_data )
 
