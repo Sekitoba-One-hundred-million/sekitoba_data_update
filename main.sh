@@ -14,4 +14,6 @@ error_log 'fail data update'
 
 error_log 'fail version data update'
 
+./shell/version_data_update.sh
+
 not_need_data_remove

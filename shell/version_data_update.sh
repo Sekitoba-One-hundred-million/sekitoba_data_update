@@ -2,6 +2,10 @@
 
 . ./shell/func.sh
 
+if [ ! -d "${version_manage_path}" ]; then
+    git_clone ${version_manage} ${version}
+fi
+
 sekitoba_data_dir='/Volumes/Gilgamesh/sekitoba-data'
 version_path="${sekitoba_data_dir}/${version}"
 
@@ -16,7 +20,7 @@ for data in `cat "${pickle_info}"`; do
     data_array=(${data})
     pickle_name=${data_array[0]}
     file_name=${data_array[1]}
-
+    echo $pickle_name $file_name
     if [ ${file_name} == "None" ]; then
         continue
     fi
