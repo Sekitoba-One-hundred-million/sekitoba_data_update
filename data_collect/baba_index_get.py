@@ -1,7 +1,8 @@
-
+import json
 from bs4 import BeautifulSoup
 import requests
 
+import sekitoba_psql as ps
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -38,8 +39,9 @@ def main():
 
     add_data = lib.thread_scraping( url_list, update_horce_id_list ).data_get( data_collect )
 
-    for k in add_data.keys():
-        baba_index_data[k] = add_data[k]    
+    for horce_id in add_data.keys():
+        baba_index_data[horce_id] = add_data[horce_id]
+        ps.HorceData().update_data( "baba_index", json.dumps( add_data[horce_id], ensure_ascii = False ), horce_id )
     
     dm.pickle_upload( "baba_index_data.pickle", baba_index_data )
 

@@ -1,7 +1,9 @@
 import time
+import json
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
+import sekitoba_psql as ps
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -105,7 +107,7 @@ def main():
         html = driver.page_source.encode('utf-8')
         soup = BeautifulSoup( html, "html.parser" )
         result[race_id] = first_time_get( soup )
-            
+        ps.RaceData().update_data( "first_up3_halon", json.dumps( result[race_id], ensure_ascii = False ), race_id )
         count += 1
 
         if count % 100 == 0:

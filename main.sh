@@ -2,9 +2,9 @@
 
 . ./shell/func.sh
 
-./shell/file_check.sh
+#./shell/file_check.sh
 
-error_log 'fail file_check'
+#error_log 'fail file_check'
 
 ./shell/start.sh
 
@@ -13,7 +13,5 @@ error_log 'fail data update'
 ./shell/version_data_update.sh
 
 error_log 'fail version data update'
-
-./shell/version_data_update.sh
 
 not_need_data_remove

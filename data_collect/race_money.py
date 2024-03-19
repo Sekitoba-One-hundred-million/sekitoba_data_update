@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 
+import sekitoba_psql as ps
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -47,8 +48,9 @@ def main():
 
     add_data = lib.thread_scraping( url_data, key_data ).data_get( race_money_get )
 
-    for k in add_data.keys():
-        race_money_data[k] = add_data[k]
+    for race_id in add_data.keys():
+        race_money_data[race_id] = add_data[race_id]
+        ps.RaceData().update_data( "money", add_data[race_id], race_id )
     
     dm.pickle_upload( "race_money_data.pickle", race_money_data )
 

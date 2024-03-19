@@ -1,8 +1,10 @@
+import json
 import datetime
 from bs4 import BeautifulSoup
 
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
+import sekitoba_psql as ps
 
 LOG_DIR = "/Volumes/Gilgamesh/sekitoba-log/"
 HORCE_ID = "horce_id"
@@ -80,7 +82,7 @@ def main():
     for k in add_race_data.keys():
         if len( add_race_data[k] ) == 0:
             continue
-        
+
         race_data[k] = add_race_data[k]
 
         for horce_id in add_race_data[k].keys():
@@ -95,13 +97,18 @@ def main():
 
     horce_data = dm.pickle_load( "horce_data_storage.pickle" )
     add_horce_data = lib.thread_scraping( horce_url_list, horce_id_list ).data_get( horce_data_collect )
+    psql_horce_data = ps.HorceData()
     
     for horce_id in add_horce_data.keys():
         horce_data[horce_id] = add_horce_data[horce_id]
+        psql_horce_data.update_data( "past_data", add_horce_data[horce_id], horce_id )
 
     dm.pickle_upload( "update_horce_id_list.pickle", horce_id_list )
     dm.pickle_upload( "race_data.pickle", race_data )
     dm.pickle_upload( "horce_data_storage.pickle", horce_data )
+    ps.HorceData().insert_data( add_horce_data )
+    ps.RaceData().insert_data( add_race_data )
+    ps.RaceHorceData().insert_data( add_race_data )
     
 if __name__ == "__main__":
     main()

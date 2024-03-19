@@ -1,5 +1,7 @@
+import json
 from bs4 import BeautifulSoup
 
+import sekitoba_psql as ps
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -66,14 +68,15 @@ def main():
     key_list = []
 
     for horce_id in update_horce_id_list:
-        if not horce_id in parent_id_data:
-            url_list.append( "https://db.netkeiba.com/horse/" + horce_id )
-            key_list.append( horce_id )
+        #if not horce_id in parent_id_data:
+        url_list.append( "https://db.netkeiba.com/horse/" + horce_id )
+        key_list.append( horce_id )
         
     add_data = lib.thread_scraping( url_list, key_list ).data_get( parent_id_get )
 
-    for k in add_data.keys():
-        parent_id_data[k] = add_data[k]
+    for horce_id in add_data.keys():
+        parent_id_data[horce_id] = add_data[horce_id]
+        ps.HorceData().update_data( "parent_id", json.dumps( add_data[horce_id] ), horce_id )
     
     dm.pickle_upload( "parent_id_data.pickle", parent_id_data )
     horce_data_storage = dm.pickle_load( "horce_data_storage.pickle" )
@@ -101,8 +104,8 @@ def main():
                 
     parent_data = lib.thread_scraping( url_list, key_list ).data_get( horse_data_collect )
     
-    for k in parent_data.keys():
-        horce_data_storage[k] = parent_data[k]
+    for horce_id in parent_data.keys():
+        horce_data_storage[horce_id] = parent_data[horce_id]
     
     dm.pickle_upload( "horce_data_storage.pickle", horce_data_storage )
     

@@ -1,9 +1,13 @@
+import sekitoba_psql as ps
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
 import copy
 import datetime
 import trueskill
+from tqdm import tqdm
+
+COLUM_NAME = "last_passing_true_skill"
 
 def main():
     horce_rating_data = {}
@@ -12,68 +16,83 @@ def main():
     use_jockey_rateing = {}
     use_trainer_rateing = {}
     env = trueskill.TrueSkill( draw_probability = 0, beta = 12 )
-    race_data = dm.pickle_load( "race_data.pickle" )
-    horce_data = dm.pickle_load( "horce_data_storage.pickle" )
-    race_day = dm.pickle_load( "race_day.pickle" )
-    race_jockey_id_data = dm.pickle_load( "race_jockey_id_data.pickle" )
-    race_trainer_id_data = dm.pickle_load( "race_trainer_id_data.pickle" )
-    
-    sort_time_data = []
+    race_data = ps.RaceData()
+    race_horce_data = ps.RaceHorceData()
+    horce_data = ps.HorceData()
+    jockey_data = ps.JockeyData()
+    trainer_data = ps.TrainerData()
+    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
+    day_data = race_data.get_select_data( "year,month,day" )
+    time_data = []
 
-    for k in race_data.keys():
-        race_id = lib.id_get( k )
-        day = race_day[race_id]
-        check_day = datetime.datetime( day["year"], day["month"], day["day"] )
-        race_num = int( race_id[-2:] )
-        timestamp = int( datetime.datetime.timestamp( check_day ) + race_num )
-        sort_time_data.append( { "k": k, "time": timestamp } )
+    for race_id in day_data.keys():
+        if not race_id in update_race_id_list:
+            continue
+        
+        check_day = datetime.datetime( day_data[race_id]["year"], day_data[race_id]["month"], + day_data[race_id]["day"] )        
+        time_data.append( { "race_id": race_id, \
+                           "time": datetime.datetime.timestamp( check_day ) } )
 
     line_timestamp = 60 * 60 * 24 * 2 - 100 # 2day race_numがあるので -100
-    sort_time_data = sorted( sort_time_data, key=lambda x: x["time"] )
+    sort_time_data = sorted( time_data, key=lambda x: x["time"] )
+    count = 0
     dev_result = { "horce": {}, "jockey": {}, "trainer": {} }
+
+    horce_rating_data = horce_data.get_select_all_data( COLUM_NAME )
+    jockey_rating_data = jockey_data.get_select_all_data( COLUM_NAME )
+    trainer_rating_data = trainer_data.get_select_all_data( COLUM_NAME )
+
+    for horce_id in horce_rating_data.keys():
+        horce_rating_data[horce_id] = env.create_rating( mu = horce_rating_data[horce_id] )
+
+    for jockey_id in jockey_rating_data.keys():
+        jockey_rating_data[jockey_id] = env.create_rating( mu = jockey_rating_data[jockey_id] )
+        use_jockey_rateing[jockey_id] = env.create_rating( mu = jockey_rating_data[jockey_id] )
+
+    for trainer_id in trainer_rating_data.keys():
+        trainer_rating_data[trainer_id] = env.create_rating( mu = trainer_rating_data[trainer_id] )
+        use_trainer_rateing[trainer_id] = env.create_rating( mu = trainer_rating_data[trainer_id] )
+
+    for std in tqdm( sort_time_data ):
+        race_id = std["race_id"]
+        race_data.get_all_data( race_id )
+        race_horce_data.get_all_data( race_id )
+        horce_data.get_multi_data( race_horce_data.horce_id_list )
     
-    for i, std in enumerate( sort_time_data ):
-        k = std["k"]
-        race_id = lib.id_get( k )
         year = race_id[0:4]
         race_place_num = race_id[4:6]
         day = race_id[9]
         num = race_id[7]
-
+        ymd = { "year": race_data.data["year"], "month": race_data.data["month"], "day": race_data.data["day"] }
+        
         dev_result["horce"][race_id] = {}
         dev_result["jockey"][race_id] = {}
         dev_result["trainer"][race_id] = {}
-        jockey_id_list = race_jockey_id_data[race_id]
-        trainer_id_list = race_trainer_id_data[race_id]
         rank_list = []
         rating_list = []
         use_jockey_id_list = []
         use_trainer_id_list = []
         use_horce_id_list = []
 
-        if not i == 0:
+        if not count == 0:
             current_timestamp = std["time"]
-            before_timestamp = sort_time_data[i-1]["time"]
+            before_timestamp = sort_time_data[count-1]["time"]
             diff_timestamp = int( current_timestamp - before_timestamp )
 
             if line_timestamp < diff_timestamp:
                 use_jockey_rateing = copy.deepcopy( jockey_rating_data )
                 use_trainer_rateing = copy.deepcopy( trainer_rating_data )
 
-        for kk in race_data[k].keys():
-            horce_id = kk
-            current_data, past_data = lib.race_check( horce_data[horce_id], race_day[race_id] )
+        for horce_id in race_horce_data.horce_id_list:
+            current_data, past_data = lib.race_check( horce_data.data[horce_id]["past_data"], ymd )
             cd = lib.current_data( current_data )
-            pd = lib.past_data( past_data, current_data )
+            pd = lib.past_data( past_data, current_data, race_data )
 
             if not cd.race_check():
                 continue
 
-            if not horce_id in jockey_id_list or not horce_id in trainer_id_list:
-                continue
-            
-            jockey_id = jockey_id_list[horce_id]
-            trainer_id = trainer_id_list[horce_id]
+            jockey_id = race_horce_data.data[horce_id]["jockey_id"]
+            trainer_id = race_horce_data.data[horce_id]["trainer_id"]
 
             if not horce_id in horce_rating_data:
                 horce_rating_data[horce_id] = env.create_rating()
@@ -118,19 +137,38 @@ def main():
             jockey_rating_data[use_jockey_id_list[i]] = copy.deepcopy( next_rating_list[i][1] )
             trainer_rating_data[use_trainer_id_list[i]] = copy.deepcopy( next_rating_list[i][2] )
 
-    prod_result = { "horce": {}, "jockey": {}, "trainer": {} }
+    last_passing_true_skill_data = dm.pickle_load( "last_passing_true_skill_data.pickle" )
+    last_passing_true_skill_prod_data = dm.pickle_load( "last_passing_true_skill_prod_data.pickle" )
+    update_horce_id_list = dm.pickle_load( "update_horce_id_list.pickle" )
 
     for horce_id in horce_rating_data.keys():
-        prod_result["horce"][horce_id] = horce_rating_data[horce_id].mu
+        last_passing_true_skill_prod_data["horce"][horce_id] = horce_rating_data[horce_id].mu
+
+        if horce_id in update_horce_id_list:
+            horce_data.update_data( COLUM_NAME, last_passing_true_skill_prod_data["horce"][horce_id], horce_id )
 
     for jockey_id in jockey_rating_data.keys():
-        prod_result["jockey"][jockey_id] = jockey_rating_data[jockey_id].mu
+        last_passing_true_skill_prod_data["jockey"][jockey_id] = jockey_rating_data[jockey_id].mu
+        ps.JockeyData().update_data( COLUM_NAME, last_passing_true_skill_prod_data["jockey"][jockey_id], jockey_id )
 
     for trainer_id in trainer_rating_data.keys():
-        prod_result["trainer"][trainer_id] = trainer_rating_data[trainer_id].mu
+        last_passing_true_skill_prod_data["trainer"][trainer_id] = trainer_rating_data[trainer_id].mu
+        ps.TrainerData().update_data( COLUM_NAME, last_passing_true_skill_prod_data["trainer"][trainer_id], trainer_id )
 
-    dm.pickle_upload( "last_passing_true_skill_data.pickle", dev_result )
-    dm.pickle_upload( "last_passing_true_skill_prod_data.pickle", prod_result )
+    for race_id in update_race_id_list:
+        for kind in dev_result.keys():
+            if not race_id in dev_result[kind]:
+                continue
+
+            last_passing_true_skill_data[kind][race_id] = {}
+            for kind_id in dev_result[kind][race_id].keys():
+                race_horce_data.update_data( kind + "_" + COLUM_NAME, \
+                                            dev_result[kind][race_id][kind_id], \
+                                            race_id, kind_id, kind + "_id" )
+                last_passing_true_skill_data[kind][race_id][kind_id] = dev_result[kind][race_id][kind_id]
+
+    dm.pickle_upload( "last_passing_true_skill_data.pickle", last_passing_true_skill_data )
+    dm.pickle_upload( "last_passing_true_skill_prod_data.pickle", last_passing_true_skill_prod_data )
 
 if __name__ == "__main__":
     main()

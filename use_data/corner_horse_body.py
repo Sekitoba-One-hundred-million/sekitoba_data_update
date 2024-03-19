@@ -1,11 +1,17 @@
+import sekitoba_psql as ps
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
+
+import json
+
+COLUM_NAME = "corner_horce_body"
 
 def main():
     result = {}
     test = {}
     corner_rank = dm.pickle_load( "corner_rank_data.pickle" )
-
+    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
+    
     for race_id in corner_rank.keys():
         for corner in corner_rank[race_id].keys():
             if len( corner_rank[race_id][corner] ) == 0:
@@ -53,7 +59,15 @@ def main():
 
     for k in test.keys():
         result.pop( k )
-        
+
+    for race_id in update_race_id_list:
+        if not race_id in result:
+            continue
+
+        ps.RaceData().update_data( COLUM_NAME,
+                                  json.dumps( result[race_id], ensure_ascii = False ),
+                                  race_id )
+    
     dm.pickle_upload( "corner_horce_body.pickle", result )
                     
 main()        

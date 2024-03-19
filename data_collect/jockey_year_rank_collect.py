@@ -1,5 +1,7 @@
+import json
 from bs4 import BeautifulSoup
 
+import sekitoba_psql as ps
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -49,6 +51,7 @@ def main():
 
     for jockey_id in add_data.keys():
         jockey_year_rank_data[jockey_id] = add_data[jockey_id]
+        ps.JockeyData().update_data( "jockey_year_rank", json.dumps( add_data[jockey_id], ensure_ascii = False ), jockey_id )
     
     dm.pickle_upload( "jockey_year_rank_data.pickle", jockey_year_rank_data )
 

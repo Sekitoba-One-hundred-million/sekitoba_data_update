@@ -1,6 +1,7 @@
 import copy
 from bs4 import BeautifulSoup
 
+import sekitoba_psql as ps
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -46,6 +47,8 @@ def main():
     race_jockey_id_data = dm.pickle_load( "race_jockey_id_data.pickle" )
     jockey_id_data = dm.pickle_load( "jockey_id_data.pickle" )
     update_race_id_data = dm.pickle_load( "update_race_id_list.pickle" )
+    jockey_data = ps.JockeyData()
+    race_horce_data = ps.RaceHorceData()
 
     key_list = []
     url_list = []
@@ -66,10 +69,12 @@ def main():
             jockey_id = copy.copy( add_data[k][kk] )
             jockey_id_data[jockey_id] = True
             update_jockey_id_data[jockey_id] = True
+            race_horce_data.update_data( "jockey_id", jockey_id, k, kk )
 
+    jockey_data.insert_data( list( update_jockey_id_data.keys() ) )
     dm.pickle_upload( "update_jockey_id_list.pickle", list( jockey_id_data.keys() ) )
     dm.pickle_upload( "race_jockey_id_data.pickle", race_jockey_id_data )
     dm.pickle_upload( "jockey_id_data.pickle", jockey_id_data )
-
+    
 if __name__ == "__main__":
     main()

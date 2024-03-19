@@ -6,6 +6,7 @@ from selenium import webdriver
 
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
+import sekitoba_psql as ps
 
 def is_biz_day( date ):    
     if date.weekday() >= 5 or jpholiday.is_holiday( date ):
@@ -46,9 +47,10 @@ def race_id_get( driver, url ):
 
 def main():
     result = []
-    race_data = dm.pickle_load( "race_data.pickle" )
+    race_data = ps.RaceData()
+    all_race_id_list = race_data.get_all_race_id()
     driver = lib.driver_start()
-    today_date = datetime.datetime.today()
+    today_date = datetime.datetime.now() - datetime.timedelta(1)
     day_count = 0
 
     while 1:
@@ -64,9 +66,7 @@ def main():
         race_id_list = race_id_get( driver, url )
 
         if not len( race_id_list ) == 0:
-            check_key = "https://race.netkeiba.com/race/shutuba.html?race_id={}".format( race_id_list[0] )
-            
-            if check_key in race_data:
+            if race_id_list[0] in all_race_id_list:
                 break
 
             result.extend( race_id_list )

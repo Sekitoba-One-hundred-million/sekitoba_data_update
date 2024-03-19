@@ -1,6 +1,7 @@
 import sys
 from bs4 import BeautifulSoup
 
+import sekitoba_psql as ps
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -45,7 +46,12 @@ def main():
         key_list.append( horce_id )
         url_list.append( url )
 
-    horce_sex_data.update( lib.thread_scraping( url_list, key_list ).data_get( data_collect ) )
+    add_sex_data = lib.thread_scraping( url_list, key_list ).data_get( data_collect )
+
+    for horce_id in add_sex_data.keys():
+        ps.HorceData().update_data( "sex", add_sex_data[horce_id], horce_id )
+    
+    horce_sex_data.update( add_sex_data )
     dm.pickle_upload( "horce_sex_data.pickle", horce_sex_data )
 
 main()

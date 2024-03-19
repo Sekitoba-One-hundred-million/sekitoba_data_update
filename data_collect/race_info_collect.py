@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 
+import sekitoba_psql as ps
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
@@ -38,6 +39,7 @@ def data_get( url ):
 def main():
     race_info_data = dm.pickle_load( "race_info_data.pickle" )
     update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
+    race_data = ps.RaceData()
     url_list = []
     key_list = []
 
@@ -51,6 +53,9 @@ def main():
     
     for k in add_data.keys():
         race_info_data[k] = add_data[k]
+
+        for kind in add_data[k].keys():
+            race_data.update_data( kind, add_data[k][kind], k )
 
     for k in race_info_data.keys():
         race_info_data[k]["out_side"] = False
