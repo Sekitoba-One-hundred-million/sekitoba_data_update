@@ -99,6 +99,7 @@ def main():
             lib.dic_append( up_data[key_place][key_kind][key_dist_kind], key_limb, [] )
             up_data[key_place][key_kind][key_dist_kind][key_limb].append( up_time )
 
+        count += 1
         result[race_id] = copy.deepcopy( up_analyze_data )
 
     up_analyze_data = up_data_analyze( up_data )

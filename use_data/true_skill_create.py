@@ -3,10 +3,12 @@ import sekitoba_library as lib
 import sekitoba_data_manage as dm
 
 import copy
+import mpmath
 import datetime
 import trueskill
 from tqdm import tqdm
 
+mpmath.mp.dps = 50
 COLUM_NAME = "true_skill"
 
 def main():
@@ -15,7 +17,7 @@ def main():
     trainer_rating_data = {}
     use_jockey_rateing = {}
     use_trainer_rateing = {}
-    env = trueskill.TrueSkill( draw_probability = 0, beta = 12 )
+    env = trueskill.TrueSkill( draw_probability = 0, beta = 12, backend = "mpmath" )
     race_data = ps.RaceData()
     race_horce_data = ps.RaceHorceData()
     horce_data = ps.HorceData()

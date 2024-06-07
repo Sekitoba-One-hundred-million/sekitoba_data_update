@@ -50,7 +50,7 @@ def main():
         for horce_id in race_horce_data.horce_id_list:
             if horce_id in finish_horce:
                 continue
-            
+
             str_data = horce_data.data[horce_id]["past_data"]
 
             for i in range( 0, len( str_data ) ):
@@ -74,7 +74,7 @@ def main():
 
                     if past_race_id in check_time:
                         timestamp = check_time[past_race_id]
-                        
+
                     pace_data.append( { "time": timestamp, \
                                        "pace": pace1 - pace2, \
                                        "up_time": up_time, \
@@ -82,35 +82,64 @@ def main():
                                        "kind": key_kind, \
                                        "race_id": past_race_id } )
 
-
     line_timestamp = 60 * 60 * 24 * 2 - 100 # 2day race_numがあるので -100
     pace_data = sorted( pace_data, key=lambda x:x["time"] )
 
     data = {}
     result = {}
     dev_result = {}
-    i = 0
+    c = 0
     
     for pace in tqdm( pace_data ):
         timestamp = pace["time"]
         
-        if not i == 0 and not timestamp == -1:
-            before_timestamp = pace_data[i-1]["time"]
+        if not c == 0 and not timestamp == -1:
+            before_timestamp = pace_data[c-1]["time"]
 
             if before_timestamp < int( timestamp - before_timestamp ):
                 data = analyze( dev_result )
         
         key_kind = pace["kind"]
-        key_dist = pace["dist"]    
+        key_dist = pace["dist"]
         lib.dic_append( dev_result, key_kind, {} )
         lib.dic_append( dev_result[key_kind], key_dist, { "pace": [], "up_time": [] } )
         dev_result[key_kind][key_dist]["pace"].append( pace["pace"] )
         dev_result[key_kind][key_dist]["up_time"].append( pace["up_time"] )
-        i += 1
+        c += 1
 
         if not timestamp == -1:
             result[pace["race_id"]] = copy.deepcopy( data )
 
+    for i in range( 0, len( sort_time_data ) ):
+        race_id = sort_time_data[i]["race_id"]
+
+        if race_id in result:
+            continue
+
+        current_time = sort_time_data[i]["time"]
+
+        for r in range( i - 1, len( sort_time_data ) ):
+            if r == i:
+                continue
+
+            r_time = 0
+            
+            try:
+                r_time = sort_time_data[r]["time"]
+            except:
+                continue
+
+            if abs( r_time - current_time ) < line_timestamp:
+                try:
+                    result[race_id] = copy.deepcopy( result[sort_time_data[r]["race_id"]] )
+                except:
+                    continue
+            else:
+                result[race_id] = {}
+
+            if i < r:
+                break
+        
     update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
     prod_result = analyze( dev_result )
     prod_data = ps.ProdData()

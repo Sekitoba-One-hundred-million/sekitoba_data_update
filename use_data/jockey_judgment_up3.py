@@ -8,7 +8,7 @@ import datetime
 import trueskill
 from tqdm import tqdm
 
-COLUM_NAME = "jockey_judgment"
+COLUM_NAME = "jockey_judgment_up3"
 
 def main():
     jockey_judgment = {}

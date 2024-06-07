@@ -1,8 +1,11 @@
+import json
 from tqdm import tqdm
 
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 import sekitoba_psql as ps
+
+COLUM_NAME = "next_race"
 
 def main():
     next_race_data = dm.pickle_load( "next_race_data.pickle" )

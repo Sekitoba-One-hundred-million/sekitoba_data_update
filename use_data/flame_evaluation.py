@@ -77,6 +77,7 @@ def main():
 
         lib.dic_append( dev_result, int_race_place_num, {} )
         lib.dic_append( dev_result[int_race_place_num], int_day, {} )
+
         result[race_id] = copy.deepcopy( prod_result )
         count += 1
 

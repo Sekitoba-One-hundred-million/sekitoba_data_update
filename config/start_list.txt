@@ -5,6 +5,7 @@ data_collect/trainer_id_collect.py
 data_collect/race_info_collect.py
 data_collect/race_day_get.py
 data_collect/race_money.py
+data_collect/corner_rank_collect.py
 data_collect/sex_collect.py
 data_collect/parent_data_collect.py
 data_collect/baba_index_get.py
@@ -42,6 +43,8 @@ use_data/train_ave_data_create.py
 use_data/corner_horse_body.py
 use_data/up_pace_analyze.py
 use_data/race_level.py
-use_data/flame_evaluation.py
 use_data/race_time_analyze_data.py
 use_data/stride_ablity_analyze.py
+use_data/dist_index.py
+use_data/standard_time.py
+use_data/up3_standard_time.py

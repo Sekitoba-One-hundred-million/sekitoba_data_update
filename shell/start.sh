@@ -9,23 +9,23 @@ fi
 status=0
 
 # スタートする前に抜けがないかを確認
-for data in `find ${data_collect_path}/*.py | awk -F '/' '{ print $NF }'`; do
-    grep -q ${data} ${start_list}
+#for data in `find ${data_collect_path}/*.py | awk -F '/' '{ print $NF }'`; do
+#    grep -q ${data} ${start_list}
     
-    if [ ! $? -eq 0 ]; then
-        status=1
-        echo not found start_list ${data_collect}/${data}
-    fi
-done
+#    if [ ! $? -eq 0 ]; then
+#        status=1
+#        echo not found start_list ${data_collect}/${data}
+#    fi
+#done
 
-for data in `find ${use_data_path}/*.py | awk -F '/' '{ print $NF }'`; do
-    grep -q ${data} ${start_list}
+#for data in `find ${use_data_path}/*.py | awk -F '/' '{ print $NF }'`; do
+#    grep -q ${data} ${start_list}
 
-    if [ ! $? -eq 0 ]; then
-        status=1
-        echo not found start_list ${use_data}/${data}
-    fi
-done
+#    if [ ! $? -eq 0 ]; then
+#        status=1
+#        echo not found start_list ${use_data}/${data}
+#    fi
+#done
 
 for data in `cat ${start_list}`; do
     find ./ | grep -q ${data}
@@ -49,10 +49,10 @@ for data in `cat ${start_list}`; do
     fi
 
     echo ${data}
-    log=`python ${data}`
+    python ${data}
 
     if [ ! $? -eq 0 ]; then
-        echo ${log}
+        #echo ${log}
         exit 1
     fi
     

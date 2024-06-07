@@ -56,10 +56,10 @@ def main():
     url_list = []
 
     for race_id in update_race_id_list:
-        if not race_id in train_time_data:
-            url = "https://race.netkeiba.com/race/oikiri.html?race_id=" + race_id
-            key_list.append( race_id )
-            url_list.append( { "url": url, "cookie": cookie } )
+        #if not race_id in train_time_data:
+        url = "https://race.netkeiba.com/race/oikiri.html?race_id=" + race_id
+        key_list.append( race_id )
+        url_list.append( { "url": url, "cookie": cookie } )
 
     add_data = lib.thread_scraping( url_list, key_list ).data_get( data_collect )
 

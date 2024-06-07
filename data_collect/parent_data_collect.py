@@ -77,7 +77,7 @@ def main():
     for horce_id in add_data.keys():
         parent_id_data[horce_id] = add_data[horce_id]
         ps.HorceData().update_data( "parent_id", json.dumps( add_data[horce_id] ), horce_id )
-    
+
     dm.pickle_upload( "parent_id_data.pickle", parent_id_data )
     horce_data_storage = dm.pickle_load( "horce_data_storage.pickle" )
     url_list.clear()
