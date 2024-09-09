@@ -56,7 +56,7 @@ def main():
     while 1:
         check_date = today_date - datetime.timedelta( days = day_count )
         day_count += 1
-
+        print( check_date )
         if not is_biz_day( check_date ):
             continue
 

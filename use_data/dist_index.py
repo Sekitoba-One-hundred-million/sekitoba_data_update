@@ -12,7 +12,10 @@ def main():
     race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
 
     for race_id in tqdm( race_id_list ):
-        race_data.update_data( COLUM_NAME, json.dumps( dist_index_data, ensure_ascii = False ), race_id )
+        try:
+            race_data.update_data( COLUM_NAME, json.dumps( dist_index_data, ensure_ascii = False ), race_id )
+        except:
+            continue
 
 if __name__ == "__main__":
     main()

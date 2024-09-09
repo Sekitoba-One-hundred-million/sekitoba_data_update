@@ -7,7 +7,6 @@ import copy
 import json
 import datetime
 from tqdm import tqdm
-import matplotlib.pyplot as plt
 
 COLUM_NAME = "up3_analyze"
 
@@ -42,7 +41,6 @@ def main():
     race_data = ps.RaceData()
     race_horce_data = ps.RaceHorceData()
     horce_data = ps.HorceData()
-    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
     day_data = race_data.get_select_data( "year,month,day" )
     time_data = []
 
@@ -78,7 +76,7 @@ def main():
             current_timestamp = std["time"]
             before_timestamp = sort_time_data[count-1]["time"]
             diff_timestamp = int( current_timestamp - before_timestamp )
-
+            
             if line_timestamp < diff_timestamp:
                 up_analyze_data = up_data_analyze( up_data )
 
@@ -103,16 +101,15 @@ def main():
         result[race_id] = copy.deepcopy( up_analyze_data )
 
     up_analyze_data = up_data_analyze( up_data )
-    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
-    
     prod_data = ps.ProdData()
     prod_data.add_colum( COLUM_NAME, "{}" )
     prod_data.update_data( COLUM_NAME, json.dumps( up_analyze_data ) )
+    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
 
     for race_id in update_race_id_list:
         if race_id in result:
             race_data.update_data( COLUM_NAME, json.dumps( result[race_id] ), race_id )
-    
+
     dm.pickle_upload( "up3_analyze_data.pickle", result )
     dm.pickle_upload( "up3_analyze_prod_data.pickle", up_analyze_data )
     

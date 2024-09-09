@@ -40,7 +40,7 @@ def main():
     for race_id in day_data.keys():
         check_day = datetime.datetime( day_data[race_id]["year"], day_data[race_id]["month"], + day_data[race_id]["day"] )
         time_data.append( { "race_id": race_id, \
-                           "time": datetime.datetime.timestamp( check_day ) } )    
+                           "time": datetime.datetime.timestamp( check_day ) } )
 
     line_timestamp = 60 * 60 * 24 * 2 - 100 # 2day race_numがあるので -100
     sort_time_data = sorted( time_data, key=lambda x: x["time"] )

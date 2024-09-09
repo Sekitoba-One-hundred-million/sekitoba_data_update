@@ -14,6 +14,9 @@ def main():
         race_data.get_all_data( race_id )
         race_horce_data.get_all_data( race_id )
 
+        if race_data.error:
+            continue
+
         year = race_id[0:4]
         race_place_num = race_id[4:6]
         day = race_id[9]

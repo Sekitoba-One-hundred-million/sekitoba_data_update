@@ -84,6 +84,7 @@ def main():
                 use_jockey_rateing = copy.deepcopy( jockey_rating_data )
                 use_trainer_rateing = copy.deepcopy( trainer_rating_data )
 
+        count += 1
         up3_data = {}
 
         for horce_id in race_horce_data.horce_id_list:

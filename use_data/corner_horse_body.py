@@ -61,6 +61,9 @@ def main():
         result.pop( k )
 
     for race_id in update_race_id_list:
+        if not race_id in result:
+            continue
+        
         ps.RaceData().update_data( COLUM_NAME,
                                   json.dumps( result[race_id], ensure_ascii = False ),
                                   race_id )

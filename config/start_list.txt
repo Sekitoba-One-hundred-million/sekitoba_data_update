@@ -48,3 +48,4 @@ use_data/stride_ablity_analyze.py
 use_data/dist_index.py
 use_data/standard_time.py
 use_data/up3_standard_time.py
+use_data/before_pace_ave.py

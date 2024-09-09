@@ -25,6 +25,7 @@ def main():
     race_horce_data = ps.RaceHorceData()
     horce_data = ps.HorceData()
     day_data = race_data.get_select_data( "year,month,day" )
+    race_data.add_colum( COLUM_NAME, "{}" )
     time_data = []
 
     for race_id in day_data.keys():
@@ -58,7 +59,7 @@ def main():
             if line_timestamp < diff_timestamp:
                 result = ave_time_create( race_time_data )
 
-        dev_result[race_id] = copy.deepcopy( result )
+        race_data.update_race_data( COLUM_NAME, json.dumps( result, ensure_ascii = False ), race_id )
         count += 1
 
         for horce_id in race_horce_data.horce_id_list:
@@ -77,12 +78,7 @@ def main():
 
     result = ave_time_create( race_time_data )
     prod_data = ps.ProdData()
-    race_data.add_colum( COLUM_NAME, "{}" )
     prod_data.add_colum( COLUM_NAME, "{}" )
-    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
-
-    for race_id in update_race_id_list:
-        race_data.update_race_data( COLUM_NAME, json.dumps( dev_result[race_id], ensure_ascii = False ), race_id )
 
     prod_data.update_data( COLUM_NAME, json.dumps( result, ensure_ascii = False ) )
 

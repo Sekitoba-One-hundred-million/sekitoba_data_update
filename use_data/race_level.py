@@ -16,6 +16,10 @@ def main():
 
     for race_id in tqdm( update_race_id_list ):
         race_data.get_all_data( race_id )
+
+        if race_data.error:
+            continue
+
         race_horce_data.get_all_data( race_id )
         horce_data.get_multi_data( race_horce_data.horce_id_list )
 
