@@ -15,7 +15,7 @@ def main():
     horce_data = ps.HorceData()
 
     for race_id in tqdm( update_race_id_list ):
-        race_data.get_all_data( race_id )
+        race_data.get_min_data( race_id )
 
         if race_data.error:
             continue

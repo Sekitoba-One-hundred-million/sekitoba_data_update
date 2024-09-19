@@ -40,7 +40,7 @@ def main():
 
     for std in tqdm( sort_time_data ):
         race_id = std["race_id"]
-        race_data.get_all_data( race_id )
+        race_data.get_min_data( race_id )
 
         if not count == 0:
             current_timestamp = std["time"]

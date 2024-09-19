@@ -32,7 +32,7 @@ def main():
     
     for std in tqdm( sort_time_data ):
         race_id = std["race_id"]    
-        race_data.get_all_data( race_id )
+        race_data.get_min_data( race_id )
         race_horce_data.get_all_data( race_id )
         key_kind = str( race_data.data["kind"] )
 

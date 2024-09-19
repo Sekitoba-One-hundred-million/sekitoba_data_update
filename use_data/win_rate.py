@@ -94,6 +94,7 @@ def main():
     horce_data = ps.HorceData()
     day_data = race_data.get_select_data( "year,month,day" )
     time_data = []
+    upload_data = '{}'
 
     for race_id in day_data.keys():
         check_day = datetime.datetime( day_data[race_id]["year"], day_data[race_id]["month"], day_data[race_id]["day"] )
@@ -109,9 +110,10 @@ def main():
     
     for count in tqdm( range( 0, len( sort_time_data ) ) ):
         race_id = sort_time_data[count]["race_id"]
-        race_data.get_all_data( race_id )
+        race_data.get_min_data( race_id )
         race_horce_data.get_all_data( race_id )
         horce_data.get_multi_data( race_horce_data.horce_id_list )
+
         base_key_data = {}
         base_key_data[PLACE] = str( race_data.data["place"] )
         base_key_data[DIST] = str( int( lib.dist_check( race_data.data["dist"] ) ) )
@@ -130,10 +132,10 @@ def main():
 
             if line_timestamp < diff_timestamp:
                 result = data_analyze( check_data, result, need_key )
+                upload_data = json.dumps( upload_data, ensure_ascii = False )
                 need_key.clear()
 
-        
-        race_data.update_race_data( COLUM_NAME, json.dumps( result, ensure_ascii = False ), race_id )
+        race_data.update_race_data( COLUM_NAME, upload_data, race_id )
 
         for horce_id in race_horce_data.horce_id_list:
             current_data, past_data = lib.race_check( horce_data.data[horce_id]["past_data"], ymd )
