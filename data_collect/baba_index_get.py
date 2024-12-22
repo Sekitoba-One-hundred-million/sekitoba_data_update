@@ -2,13 +2,18 @@ import json
 from bs4 import BeautifulSoup
 import requests
 
-import sekitoba_psql as ps
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaPsql as ps
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 def data_collect( data ):
     result = {}
-    r, _ = lib.request( data["url"], cookie = data["cookie"] )
+    r, requestSucess = lib.request( data["url"], cookie = data["cookie"] )
+
+    if not requestSucess:
+        print( "Error: {}".format( data["url"] ) )
+        return result
+    
     soup = BeautifulSoup( r.content, "html.parser" )
     tr_tag = soup.findAll( "tr" )
 
@@ -29,7 +34,7 @@ def data_collect( data ):
 
 def main():
     baba_index_data = dm.pickle_load( "baba_index_data.pickle" )
-    cookie = lib.netkeiba_login()
+    cookie = lib.netkeibaLogin()
     update_horce_id_list = dm.pickle_load( "update_horce_id_list.pickle" )
     url_list = []
 

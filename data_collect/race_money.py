@@ -1,12 +1,17 @@
 from bs4 import BeautifulSoup
 
-import sekitoba_psql as ps
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaPsql as ps
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 def race_money_get( url ):
     money = 0
-    r, _ = lib.request( url ) #requests.get( url )
+    r, requestSucess = lib.request( url )
+
+    if not requestSucess:
+        print( "Error: {}".format( data["url"] ) )
+        return result
+
     soup = BeautifulSoup( r.content, "html.parser" )
     div_tag = soup.findAll( "div" )
 
@@ -41,10 +46,9 @@ def main():
     key_data = []
 
     for race_id in update_race_id_list:
-        if not race_id in race_money_data:
-            url = base_url + race_id
-            url_data.append( url )
-            key_data.append( race_id )
+        url = base_url + race_id
+        url_data.append( url )
+        key_data.append( race_id )
 
     add_data = lib.thread_scraping( url_data, key_data ).data_get( race_money_get )
 

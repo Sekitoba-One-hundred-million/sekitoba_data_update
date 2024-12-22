@@ -1,6 +1,6 @@
-import sekitoba_psql as ps
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaPsql as ps
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 import json
 
@@ -17,7 +17,7 @@ def main():
             if len( corner_rank[race_id][corner] ) == 0:
                 continue
 
-            lib.dic_append( result, race_id, {} )
+            lib.dicAppend( result, race_id, {} )
             result[race_id][corner] = {}
             hb = 0
             box = False

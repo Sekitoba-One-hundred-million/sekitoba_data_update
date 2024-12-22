@@ -1,11 +1,16 @@
 from bs4 import BeautifulSoup
 
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 def race_course_data_get( url ):
     result = {}
-    r, _ = lib.request( url ) #requests.get( url )
+    r, requestSucess = lib.request( url )
+
+    if not requestSucess:
+        print( "Error: {}".format( data["url"] ) )
+        return result
+
     soup = BeautifulSoup( r.content, "html.parser" )
     div_tag = soup.findAll( "div" )
 

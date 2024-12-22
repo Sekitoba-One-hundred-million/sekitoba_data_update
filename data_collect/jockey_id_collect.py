@@ -1,13 +1,18 @@
 import copy
 from bs4 import BeautifulSoup
 
-import sekitoba_psql as ps
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaPsql as ps
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 def data_collect( url ):
     result = {}
-    r, _ = lib.request( url )
+    r, requestSucess = lib.request( url )
+
+    if not requestSucess:
+        print( "Error: {}".format( data["url"] ) )
+        return result
+    
     soup = BeautifulSoup( r.content, "html.parser" )
     tr_tag = soup.findAll( "tr" )
 
@@ -54,10 +59,9 @@ def main():
     url_list = []
 
     for race_id in update_race_id_data:
-        if not race_id in race_jockey_id_data:
-            url = "https://race.netkeiba.com/race/shutuba.html?race_id=" + race_id
-            key_list.append( race_id )
-            url_list.append( url )
+        url = "https://race.netkeiba.com/race/shutuba.html?race_id=" + race_id
+        key_list.append( race_id )
+        url_list.append( url )
 
     update_jockey_id_data = {}
     add_data = lib.thread_scraping( url_list, key_list ).data_get( data_collect )

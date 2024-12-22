@@ -1,6 +1,6 @@
-import sekitoba_psql as ps
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaPsql as ps
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 COLUM_NAME = "race_ave_true_skill"
 

@@ -1,11 +1,16 @@
 from bs4 import BeautifulSoup
 
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 def data_collect( url ):
     result = {}
-    r, _ = lib.request( url )
+    r, requestSucess = lib.request( url )
+
+    if not requestSucess:
+        print( "Error: {}".format( data["url"] ) )
+        return result
+
     soup = BeautifulSoup( r.content, "html.parser" )
     table_tag = soup.findAll( "table" )
 
@@ -37,11 +42,6 @@ def main():
     key_list = []
 
     for race_id in update_race_id_list:
-        year = race_id[0:4]
-
-        if race_id in result:
-            continue
-        
         url = "https://race.netkeiba.com/race/result.html?race_id=" + race_id
         key_list.append( race_id )
         url_list.append( url )

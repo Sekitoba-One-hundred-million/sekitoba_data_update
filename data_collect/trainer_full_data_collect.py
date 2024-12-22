@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 def data_collect( base_url, result ):
     count = 1
@@ -12,7 +12,12 @@ def data_collect( base_url, result ):
             break
 
         url = base_url + str( count )
-        r,_  = lib.request( url )
+        r, requestSucess = lib.request( url )
+
+        if not requestSucess:
+            print( "Error: {}".format( data["url"] ) )
+            return result
+
         soup = BeautifulSoup( r.content, "html.parser" )
         tbody = soup.find( "tbody" )
         if tbody == None:
@@ -37,8 +42,8 @@ def data_collect( base_url, result ):
                     finish = True
                     break
                 
-                lib.dic_append( result, key_day, {} )
-                lib.dic_append( result[key_day], key_race_num, {} )
+                lib.dicAppend( result, key_day, {} )
+                lib.dicAppend( result[key_day], key_race_num, {} )
                 result[key_day][key_race_num]["place"] = td_tag[1].text
                 result[key_day][key_race_num]["weather"] = td_tag[2].text
                 result[key_day][key_race_num]["all_horce_num"] = td_tag[6].text
@@ -72,7 +77,7 @@ def main():
         url = base_url + trainer_id + "&page="
         url_list.append( url )
         key_list.append( trainer_id )
-        lib.dic_append( result, trainer_id, {} )
+        lib.dicAppend( result, trainer_id, {} )
         result[trainer_id] = data_collect( base_url, result[trainer_id] )
 
     dm.pickle_upload( "trainer_full_data.pickle", result )

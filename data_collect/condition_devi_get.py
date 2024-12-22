@@ -1,11 +1,16 @@
 from bs4 import BeautifulSoup
 
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 def data_get( url ):
     result = {}
-    r, _ = lib.request( url )
+    r, requestSucess = lib.request( url )
+
+    if not requestSucess:
+        print( "Error: {}".format( data["url"] ) )
+        return result
+    
     soup = BeautifulSoup( r.content, "html.parser" )
     tr_tag = soup.findAll( "tr" )
 
@@ -20,7 +25,7 @@ def data_get( url ):
                 a_tag = td_tag[2].find( "a" )
                 horce_id = a_tag.get( "href" ).split( "&" )[0].split( "horse_id=" )[-1]
                 span_tag = td_tag[3].findAll( "span" )
-                condition_devi = float( lib.text_replace( span_tag[0].text ) )
+                condition_devi = float( lib.textReplace( span_tag[0].text ) )
                 result[horce_id] = condition_devi
             except:
                 continue

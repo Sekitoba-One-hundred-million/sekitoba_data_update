@@ -1,9 +1,9 @@
 target_race_id_collect.py
+data_collect/race_day_get.py
 data_collect/main_data_collect.py
 data_collect/jockey_id_collect.py
 data_collect/trainer_id_collect.py
 data_collect/race_info_collect.py
-data_collect/race_day_get.py
 data_collect/race_money.py
 data_collect/corner_rank_collect.py
 data_collect/sex_collect.py

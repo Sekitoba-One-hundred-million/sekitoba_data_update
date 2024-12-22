@@ -1,8 +1,8 @@
 import json
 from tqdm import tqdm
 
-import sekitoba_data_manage as dm
-import sekitoba_psql as ps
+import SekitobaDataManage as dm
+import SekitobaPsql as ps
 
 COLUM_NAME = "dist_index"
 

@@ -1,6 +1,6 @@
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
-import sekitoba_psql as ps
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
+import SekitobaPsql as ps
 
 import copy
 import json
@@ -32,7 +32,7 @@ def main():
 
     for std in tqdm( sort_time_data ):
         race_id = std["race_id"]
-        race_data.get_min_data( race_id )
+        race_data.get_all_data( race_id )
         race_horce_data.get_all_data( race_id )
         horce_data.get_multi_data( race_horce_data.horce_id_list )
 
@@ -43,6 +43,7 @@ def main():
         ymd = { "year": race_data.data["year"], "month": race_data.data["month"], "day": race_data.data["day"] }
         
         dev_result[race_id] = {}
+
         rank_list = []
         rating_list = []
         use_jockey_id_list = []
@@ -61,17 +62,17 @@ def main():
         limb_dict = {}
         limb_count_data = {}
         count += 1
-        
-        for horce_id in race_horce_data.horce_id_list:
-            current_data, past_data = lib.race_check( horce_data.data[horce_id]["past_data"], ymd )
-            cd = lib.current_data( current_data )
-            pd = lib.past_data( past_data, current_data, race_data )
 
-            if not cd.race_check():
+        for horce_id in race_horce_data.horce_id_list:
+            current_data, past_data = lib.raceCheck( horce_data.data[horce_id]["past_data"], ymd )
+            cd = lib.CurrentData( current_data )
+            pd = lib.PastData( past_data, current_data, race_data )
+
+            if not cd.raceCheck():
                 continue
 
-            limb_math = int( lib.limb_search( pd ) )
-            lib.dic_append( limb_count_data, limb_math, 0 )
+            limb_math = int( lib.limbSearch( pd ) )
+            lib.dicAppend( limb_count_data, limb_math, 0 )
             limb_count_data[limb_math] += 1
             limb_dict[horce_id] = limb_math
 
@@ -79,18 +80,18 @@ def main():
                 escape_count += 1
 
         for horce_id in race_horce_data.horce_id_list:
-            current_data, past_data = lib.race_check( horce_data.data[horce_id]["past_data"], ymd )
-            cd = lib.current_data( current_data )
-            pd = lib.past_data( past_data, current_data, race_data )
+            current_data, past_data = lib.raceCheck( horce_data.data[horce_id]["past_data"], ymd )
+            cd = lib.CurrentData( current_data )
+            pd = lib.PastData( past_data, current_data, race_data )
 
-            if not cd.race_check():
+            if not cd.raceCheck():
                 continue
 
             key_place = str( int( cd.place() ) )
-            key_kind = str( int( cd.race_kind() ) )
-            key_dist_kind = str( int( cd.dist_kind() ) )
-            key_limb = str( int( lib.limb_search( pd ) ) )
-            
+            key_kind = str( int( cd.raceKind() ) )
+            key_dist_kind = str( int( cd.distKind() ) )
+            key_limb = str( int( lib.limbSearch( pd ) ) )
+
             try:
                 ave_up3 = race_data.data["up3_analyze"][key_place][key_kind][key_dist_kind][key_limb]["ave"]
             except:
@@ -98,9 +99,9 @@ def main():
 
             rate_key = "0"
 
-            if ave_up3 - cd.up_time() < -0.5:
+            if ave_up3 - cd.upTime() < -0.5:
                 rate_key = "1"
-            elif 0.5 < ave_up3 - cd.up_time():
+            elif 0.5 < ave_up3 - cd.upTime():
                 rate_key = "2"
             
             jockey_id = race_horce_data.data[horce_id]["jockey_id"]
@@ -109,10 +110,10 @@ def main():
             key_data = {}
             key_data["limb"] = str( int( limb_math ) )
             key_data["popular"] = str( int( cd.popular() ) )
-            key_data["flame_num"] = str( int( cd.flame_number() ) )
-            key_data["dist"] = str( int( cd.dist_kind() ) )
-            key_data["kind"] = str( int( cd.race_kind() ) )
-            key_data["baba"] = str( int( cd.baba_status() ) )
+            key_data["flame_num"] = str( int( cd.flameNumber() ) )
+            key_data["dist"] = str( int( cd.distKind() ) )
+            key_data["kind"] = str( int( cd.raceKind() ) )
+            key_data["baba"] = str( int( cd.babaStatus() ) )
             key_data["place"] = str( int( cd.place()) )
             key_data["limb_count"] = str( int( limb_count_data[limb_math] ) )
             key_data["escape_count"] = str( int( escape_count ) )
@@ -123,20 +124,20 @@ def main():
             dev_result[race_id][horce_id] = {}
             
             for param in param_list:
-                lib.dic_append( jockey_judgment[jockey_id], param, {} )                
-                lib.dic_append( jockey_judgment[jockey_id][param], key_data[param], { "0": 0, "1": 0, "2": 0, "count": 0 } )
+                lib.dicAppend( jockey_judgment[jockey_id], param, {} )                
+                lib.dicAppend( jockey_judgment[jockey_id][param], key_data[param], { "0": 0, "1": 0, "2": 0, "count": 0 } )
                 jockey_judgment[jockey_id][param][key_data[param]][rate_key] += 1
                 jockey_judgment[jockey_id][param][key_data[param]]["count"] += 1
                 
-                score_data = { "0": -1000, "1": -1000 }
+                score_data = { "0": lib.escapeValue, "1": lib.escapeValue }
 
                 if jockey_id in use_jockey_judgment and \
-                param in use_jockey_judgment[jockey_id] and \
-                key_data[param] in use_jockey_judgment[jockey_id][param] and \
-                not use_jockey_judgment[jockey_id][param][key_data[param]]["count"] == 0:
+                  param in use_jockey_judgment[jockey_id] and \
+                  key_data[param] in use_jockey_judgment[jockey_id][param] and \
+                  not use_jockey_judgment[jockey_id][param][key_data[param]]["count"] == 0:
                     for r in [ "0", "1", "2" ]:
                         score_data[r] = use_jockey_judgment[jockey_id][param][key_data[param]][r] / use_jockey_judgment[jockey_id][param][key_data[param]]["count"]
-                    
+
                 dev_result[race_id][horce_id][param] = score_data
 
                 jockey_judgment[jockey_id][param][key_data[param]]["count"] += 1
@@ -151,7 +152,7 @@ def main():
 
     update_jockey_id_list = dm.pickle_load( "update_jockey_id_list.pickle" )
     update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
-    
+
     for jockey_id in tqdm( update_jockey_id_list ):
         if not jockey_id in jockey_judgment:
             continue
@@ -162,6 +163,8 @@ def main():
 
     for race_id in tqdm( update_race_id_list ):
         if not race_id in dev_result:
+            if race_id == "202405040201":
+                print( race_id )
             continue
 
         for horce_id in dev_result[race_id].keys():

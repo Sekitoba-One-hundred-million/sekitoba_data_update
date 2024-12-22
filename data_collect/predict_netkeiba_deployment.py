@@ -2,13 +2,18 @@ import copy
 import json
 from bs4 import BeautifulSoup
 
-import sekitoba_psql as ps
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaPsql as ps
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 def data_get( url ):
     result = []
-    r, _ = lib.request( url )
+    r, requestSucess = lib.request( url )
+
+    if not requestSucess:
+        print( "Error: {}".format( data["url"] ) )
+        return result
+
     soup = BeautifulSoup( r.content, 'html.parser' )
     div_tag = soup.findAll( 'div' )
 
@@ -31,11 +36,11 @@ def data_get( url ):
                         result.append( copy.deepcopy( instance_list ) )
                         instance_list = []
 
-                    key = lib.text_replace( dt.text )
+                    key = lib.textReplace( dt.text )
                     continue
 
                 try:
-                    instance_list.append( int( lib.text_replace( li.find( "span" ).text ) ) )
+                    instance_list.append( int( lib.textReplace( li.find( "span" ).text ) ) )
                 except:
                     continue
                 
@@ -53,19 +58,16 @@ def main():
     
     if result == None:
         result = {}
-        
+
+    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
     base_url = 'https://race.netkeiba.com/race/shutuba.html?race_id='
-    race_data = dm.pickle_load( 'race_data.pickle' )
     url_data = []
     key_data = []
     
-    for k in race_data.keys():
-        race_id = lib.id_get(k)
+    for race_id in update_race_id_list:
         url = base_url + race_id
-
-        if not race_id in result:
-            url_data.append( url )
-            key_data.append( race_id )
+        url_data.append( url )
+        key_data.append( race_id )
 
     add_data = lib.thread_scraping( url_data, key_data ).data_get( data_get )
 

@@ -1,13 +1,18 @@
 import sys
 from bs4 import BeautifulSoup
 
-import sekitoba_psql as ps
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaPsql as ps
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 def data_collect( url ):
     horce_sex = 0
-    r, _ = lib.request( url )
+    r, requestSucess = lib.request( url )
+
+    if not requestSucess:
+        print( "Error: {}".format( data["url"] ) )
+        return result
+
     soup = BeautifulSoup( r.content, "html.parser" )
     div = soup.findAll( "div" )
 
@@ -39,9 +44,6 @@ def main():
     key_list = []
 
     for horce_id in update_horce_id_list:
-        if horce_id in horce_sex_data:
-            continue
-        
         url = base_url + horce_id
         key_list.append( horce_id )
         url_list.append( url )

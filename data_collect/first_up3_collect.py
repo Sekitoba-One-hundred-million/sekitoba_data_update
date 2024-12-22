@@ -3,9 +3,9 @@ import json
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-import sekitoba_psql as ps
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaPsql as ps
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 def first_time_get( soup ):
     result = {}
@@ -33,7 +33,7 @@ def first_time_get( soup ):
             except:
                 continue
 
-            lib.dic_append( result, horce_num, {} )
+            lib.dicAppend( result, horce_num, {} )
             ul_tag = dl.findAll( "ul" )
 
             for ul in ul_tag:
@@ -60,66 +60,23 @@ def first_time_get( soup ):
 def main():
     result = dm.pickle_load( "first_up3_halon.pickle" )
     base_url = "https://race.netkeiba.com/race/newspaper.html?race_id="
-    race_data = dm.pickle_load( "race_data.pickle" )
-    horce_data = dm.pickle_load( "horce_data_storage.pickle" )
-    race_day = dm.pickle_load( "race_day.pickle" )
-    driver = lib.driver_start()
+    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
+    driver = lib.driverStart()
     driver = lib.login( driver )
     count = 0
 
-    collect_race_id_list = []
-
-    for k in race_data.keys():
-        race_id = lib.id_get( k )
-        year = race_id[0:4]
-        race_place_num = race_id[4:6]
-        day = race_id[9]
-        num = race_id[7]
-
-        if not race_id in result:
-            collect_race_id_list.append( race_id )
-        else:
-            horce_id = list( race_data[k].keys() )[0]
-            current_data, _ = lib.race_check( horce_data[horce_id], race_day[race_id] )
-            cd = lib.current_data( current_data )
-
-            if not cd.race_check() or cd.new_check():
-                continue
-
-            if len( result[race_id] ) == 0:
-                collect_race_id_list.append( race_id )
-            else:
-                zero_count = 0
-                for key_horce_num in result[race_id].keys():
-                    if not type( result[race_id][key_horce_num] ) is dict:
-                        collect_race_id_list.append( race_id )
-                        break
-                    elif len( result[race_id][key_horce_num] ) == 0:
-                        zero_count += 1
-
-                if zero_count == len( result[race_id] ):
-                    collect_race_id_list.append( race_id )
-
-    for race_id in collect_race_id_list:
+    for race_id in update_race_id_list:
         url = base_url + race_id
-        driver, _ = lib.driver_request( driver, url )
+        driver, _ = lib.driverRequest( driver, url )
+        print( race_id )
         time.sleep( 2 )
         html = driver.page_source.encode('utf-8')
         soup = BeautifulSoup( html, "html.parser" )
         result[race_id] = first_time_get( soup )
         ps.RaceData().update_data( "first_up3_halon", json.dumps( result[race_id], ensure_ascii = False ), race_id )
-        count += 1
-
-        if count % 100 == 0:
-            dm.pickle_upload( "first_up3_halon.pickle", result )
 
     driver.close()
     dm.pickle_upload( "first_up3_halon.pickle", result )
 
 if __name__ == "__main__":
-    while 1:
-        try:
-            main()
-            break
-        except:
-            pass
+    main()

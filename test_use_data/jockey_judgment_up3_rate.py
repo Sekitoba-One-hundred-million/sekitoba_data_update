@@ -1,5 +1,5 @@
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 import copy
 import datetime
@@ -17,7 +17,7 @@ def main():
     param_list = [ "limb", "popular", "flame_num", "dist", "kind", "baba", "place", "limb_count", "escape_count" ]
 
     for k in race_data.keys():
-        race_id = lib.id_get( k )
+        race_id = lib.idGet( k )
         day = race_day[race_id]
         check_day = datetime.datetime( day["year"], day["month"], day["day"] )
         race_num = int( race_id[-2:] )
@@ -30,7 +30,7 @@ def main():
     
     for i, std in enumerate( sort_time_data ):
         k = std["k"]
-        race_id = lib.id_get( k )
+        race_id = lib.idGet( k )
         year = race_id[0:4]
         race_place_num = race_id[4:6]
         day = race_id[9]
@@ -58,16 +58,16 @@ def main():
         
         for kk in race_data[k].keys():
             horce_id = kk
-            current_data, past_data = lib.race_check( horce_data[horce_id],
+            current_data, past_data = lib.raceCheck( horce_data[horce_id],
                                                      year, day, num, race_place_num )#今回と過去のデータに分ける
-            cd = lib.current_data( current_data )
-            pd = lib.past_data( past_data, current_data )
+            cd = lib.CurrentData( current_data )
+            pd = lib.PastData( past_data, current_data )
 
-            if not cd.race_check():
+            if not cd.raceCheck():
                 continue
 
-            limb_math = int( lib.limb_search( pd ) )
-            lib.dic_append( limb_count_data, limb_math, 0 )
+            limb_math = int( lib.limbSearch( pd ) )
+            lib.dicAppend( limb_count_data, limb_math, 0 )
             limb_count_data[limb_math] += 1
             limb_dict[horce_id] = limb_math
 
@@ -76,12 +76,12 @@ def main():
 
         for kk in race_data[k].keys():
             horce_id = kk
-            current_data, past_data = lib.race_check( horce_data[horce_id],
+            current_data, past_data = lib.raceCheck( horce_data[horce_id],
                                                      year, day, num, race_place_num )#今回と過去のデータに分ける
-            cd = lib.current_data( current_data )
-            pd = lib.past_data( past_data, current_data )
+            cd = lib.CurrentData( current_data )
+            pd = lib.PastData( past_data, current_data )
 
-            if not cd.race_check():
+            if not cd.raceCheck():
                 continue
 
             if not horce_id in jockey_id_list:
@@ -89,8 +89,8 @@ def main():
 
             limb_math = limb_dict[horce_id]
             key_place = str( int( cd.place() ) )
-            key_kind = str( int( cd.race_kind() ) )
-            key_dist_kind = str( int( cd.dist_kind() ) )
+            key_kind = str( int( cd.raceKind() ) )
+            key_dist_kind = str( int( cd.distKind() ) )
             key_limb = str( int( limb_math ) )
 
             try:
@@ -99,9 +99,9 @@ def main():
                 continue
 
             rate_key = "0"
-            if ave_up3 - cd.up_time() < -0.5:
+            if ave_up3 - cd.upTime() < -0.5:
                 rate_key = "1"
-            elif 0.5 < ave_up3 - cd.up_time():
+            elif 0.5 < ave_up3 - cd.upTime():
                 rate_key = "2"
             
             jockey_id = jockey_id_list[horce_id]
@@ -109,10 +109,10 @@ def main():
             key_data = {}
             key_data["limb"] = str( int( limb_math ) )
             key_data["popular"] = str( int( cd.popular() ) )
-            key_data["flame_num"] = str( int( cd.flame_number() ) )
-            key_data["dist"] = str( int( cd.dist_kind() ) )
-            key_data["kind"] = str( int( cd.race_kind() ) )
-            key_data["baba"] = str( int( cd.baba_status() ) )
+            key_data["flame_num"] = str( int( cd.flameNumber() ) )
+            key_data["dist"] = str( int( cd.distKind() ) )
+            key_data["kind"] = str( int( cd.raceKind() ) )
+            key_data["baba"] = str( int( cd.babaStatus() ) )
             key_data["place"] = str( int( cd.place()) )
             key_data["limb_count"] = str( int( limb_count_data[limb_math] ) )
             key_data["escape_count"] = str( int( escape_count ) )
@@ -123,8 +123,8 @@ def main():
             dev_result[race_id][horce_id] = {}
             
             for param in param_list:
-                lib.dic_append( jockey_judgment[jockey_id], param, {} )                
-                lib.dic_append( jockey_judgment[jockey_id][param], key_data[param], { "0": 0, "1": 0, "2": 0, "count": 0 } )
+                lib.dicAppend( jockey_judgment[jockey_id], param, {} )                
+                lib.dicAppend( jockey_judgment[jockey_id][param], key_data[param], { "0": 0, "1": 0, "2": 0, "count": 0 } )
                 jockey_judgment[jockey_id][param][key_data[param]][rate_key] += 1
                 jockey_judgment[jockey_id][param][key_data[param]]["count"] += 1
                 

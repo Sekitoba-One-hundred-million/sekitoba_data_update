@@ -2,9 +2,9 @@ import json
 import datetime
 from bs4 import BeautifulSoup
 
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
-import sekitoba_psql as ps
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
+import SekitobaPsql as ps
 
 LOG_DIR = "/Volumes/Gilgamesh/sekitoba-log/"
 HORCE_ID = "horce_id"
@@ -18,7 +18,12 @@ def num_check( num ):
 def horce_data_collect( url ):
     horce_data = []
 
-    r, _ = lib.request( url )
+    r, requestSucess = lib.request( url )
+
+    if not requestSucess:
+        print( "Error: {}".format( data["url"] ) )
+        return horce_data
+    
     soup = BeautifulSoup( r.content, "html.parser" )
     tr_tag = soup.findAll( "tr" )
 
@@ -47,7 +52,12 @@ def horce_data_collect( url ):
 
 def race_data_search( url ):
     current_race_data = {}
-    r, _ = lib.request( url )
+    r, requestSucess = lib.request( url )
+
+    if not requestSucess:
+        print( "Error: {}".format( data["url"] ) )
+        return result
+    
     soup = BeautifulSoup( r.content, "html.parser" )
     span_tag = soup.findAll( "span" )
     

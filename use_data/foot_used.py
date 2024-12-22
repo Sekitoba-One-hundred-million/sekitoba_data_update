@@ -1,5 +1,5 @@
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 def main():
     result = {}
@@ -8,7 +8,7 @@ def main():
     wrap_data = dm.pickle_load( "wrap_data.pickle" )
 
     for k in race_data.keys():
-        race_id = lib.id_get( k )
+        race_id = lib.idGet( k )
         race_place_num = race_id[4:6]
         current_wrap = wrap_data[race_id]
         
@@ -40,7 +40,7 @@ def main():
         if score < 11.6:
             foot_score = 2 #change
 
-        lib.dic_append( check_data, race_place_num, { "1": 0, "2": 0, "count": 0 } )
+        lib.dicAppend( check_data, race_place_num, { "1": 0, "2": 0, "count": 0 } )
         key_foot_score = str( foot_score )
         check_data[race_place_num][key_foot_score] += 1
         check_data[race_place_num]["count"] += 1

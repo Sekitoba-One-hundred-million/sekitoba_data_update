@@ -1,13 +1,18 @@
 import json
 from bs4 import BeautifulSoup
 
-import sekitoba_psql as ps
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaPsql as ps
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 def data_collect( url ):
     result = {}
-    r, _ = lib.request( url )
+    r, requestSucess = lib.request( url )
+
+    if not requestSucess:
+        print( "Error: {}".format( data["url"] ) )
+        return result
+    
     soup = BeautifulSoup( r.content, "html.parser" )
     table_tag = soup.findAll( "table" )
 
@@ -24,8 +29,8 @@ def data_collect( url ):
                     year = 0
 
                     try:
-                        year = int( lib.text_replace( td_tag[0].text ) )
-                        rank = int( lib.text_replace( td_tag[1].text ) )
+                        year = int( lib.textReplace( td_tag[0].text ) )
+                        rank = int( lib.textReplace( td_tag[1].text ) )
                     except:
                         continue
 

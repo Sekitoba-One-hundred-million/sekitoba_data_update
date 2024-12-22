@@ -1,13 +1,18 @@
 from bs4 import BeautifulSoup
 import requests
 
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 def data_collect( data ):
     result = {}
     count = 1
-    r, _ = lib.request( data["url"], cookie = data["cookie"] )
+    r, requestSucess = lib.request( data["url"], cookie = data["cookie"] )
+
+    if not requestSucess:
+        print( "Error: {}".format( data["url"] ) )
+        return result
+
     soup = BeautifulSoup( r.content, "html.parser" )
     ul_tag = soup.findAll( "ul" )
     tr_tag = soup.findAll( "tr" )    
@@ -23,7 +28,7 @@ def data_collect( data ):
                 continue
 
             key = td_tag[1].text
-            lib.dic_append( result, key, { "time": [], "wrap": [], "load": "", "critic": "", "rank": "", "cource": ""  } )
+            lib.dicAppend( result, key, { "time": [], "wrap": [], "load": "", "critic": "", "rank": "", "cource": ""  } )
             li_tag = td_tag[8].findAll( "li" )
             result[key]["cource"] = td_tag[5].text            
             result[key]["load"] = td_tag[10].text
@@ -51,12 +56,11 @@ def main():
     train_time_data = dm.pickle_load( "train_time_data.pickle" )
     update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
 
-    cookie = lib.netkeiba_login()
+    cookie = lib.netkeibaLogin()
     key_list = []
     url_list = []
 
     for race_id in update_race_id_list:
-        #if not race_id in train_time_data:
         url = "https://race.netkeiba.com/race/oikiri.html?race_id=" + race_id
         key_list.append( race_id )
         url_list.append( { "url": url, "cookie": cookie } )
