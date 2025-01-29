@@ -63,9 +63,6 @@ def main():
         key_kind = str( race_data.data["kind"] )        
         ymd = { "year": race_data.data["year"], "month": race_data.data["month"], "day": race_data.data["day"] }
 
-        if race_id == "202405040803":
-            print( key_kind, race_data.data )
-
         #芝かダートのみ
         if key_kind == "0" or key_kind == "3":
             continue

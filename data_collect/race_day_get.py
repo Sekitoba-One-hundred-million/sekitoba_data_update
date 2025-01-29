@@ -39,16 +39,8 @@ def main():
     race_data = ps.RaceData()
     removelist = []
 
-    for race_id in update_race_id_list:
-        add_data[race_id] = day_get( race_id )
-
-        if add_data[race_id]["month"] == 0:
-            removelist.append( race_id )
-
-    for race_id in removelist:
-        update_race_id_list.remove( race_id )
-        race_data.delete_data( race_id )
-
+    add_data = lib.thread_scraping( update_race_id_list, update_race_id_list ).data_get( day_get )
+    
     for race_id in add_data.keys():
         race_day_data[race_id] = add_data[race_id]
 

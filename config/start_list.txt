@@ -19,6 +19,7 @@ data_collect/first_up3_collect.py
 data_collect/time_index_get.py
 data_collect/predict_netkeiba_deployment.py
 data_collect/predict_netkeiba_pace.py
+data_collect/wide_odds_collect.py
 use_data/flame_evaluation.py
 use_data/up_kind_ave.py
 use_data/up3_analyze.py

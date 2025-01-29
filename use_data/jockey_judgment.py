@@ -19,6 +19,7 @@ def main():
     day_data = race_data.get_select_data( "year,month,day" )
     time_data = []
     param_list = [ "limb", "popular", "flame_num", "dist", "kind", "baba", "place", "limb_count", "escape_count" ]
+    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
 
     for race_id in day_data.keys():
         check_day = datetime.datetime( day_data[race_id]["year"], day_data[race_id]["month"], + day_data[race_id]["day"] )
@@ -116,7 +117,7 @@ def main():
             
             if not jockey_id in jockey_judgment:
                 jockey_judgment[jockey_id] = {}
-
+                
             dev_result[race_id][horce_id] = {}
                 
             for param in param_list:
@@ -144,7 +145,6 @@ def main():
                 jockey_judgment[jockey_id][param][data] = jockey_judgment[jockey_id][param][data]["score"] / jockey_judgment[jockey_id][param][data]["count"]
 
     update_jockey_id_list = dm.pickle_load( "update_jockey_id_list.pickle" )
-    update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
     
     for jockey_id in tqdm( update_jockey_id_list ):
         if not jockey_id in jockey_judgment:
