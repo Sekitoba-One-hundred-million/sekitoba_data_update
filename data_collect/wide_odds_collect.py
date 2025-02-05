@@ -8,7 +8,7 @@ import SekitobaLibrary as lib
 import SekitobaDataManage as dm
 
 def data_get( driver, url ):
-    driver, _ = lib.driverRequest( driver, url )
+    driver, _ = lib.driver_request( driver, url )
     time.sleep( 1 )
     html = driver.page_source.encode('utf-8')
     soup = BeautifulSoup( html, "html.parser" )      
@@ -33,13 +33,13 @@ def data_get( driver, url ):
 
             if len( class_name ) == 1 and class_name[0] == "Waku_Normal":
                 try:
-                    before_num = int( lib.textReplace( td.text ) )
+                    before_num = int( lib.text_replace( td.text ) )
                 except:
                     continue
 
             if len( class_name ) == 2 and class_name[0] == "Odds" and class_name[1] == "Popular":
                 try:
-                    odds_text = lib.textReplace( td.text )
+                    odds_text = lib.text_replace( td.text )
                     min_odds = ""
                     max_odds = ""
                     max_flag = False
@@ -72,7 +72,7 @@ def data_get( driver, url ):
     return odds_data
 
 def main():
-    driver = lib.driverStart()
+    driver = lib.driver_start()
     result = dm.pickle_load( "wide_odds_data.pickle" )
     update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )    
 

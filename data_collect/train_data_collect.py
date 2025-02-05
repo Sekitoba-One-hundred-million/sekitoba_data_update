@@ -28,7 +28,7 @@ def data_collect( data ):
                 continue
 
             key = td_tag[1].text
-            lib.dicAppend( result, key, { "time": [], "wrap": [], "load": "", "critic": "", "rank": "", "cource": ""  } )
+            lib.dic_append( result, key, { "time": [], "wrap": [], "load": "", "critic": "", "rank": "", "cource": ""  } )
             li_tag = td_tag[8].findAll( "li" )
             result[key]["cource"] = td_tag[5].text            
             result[key]["load"] = td_tag[10].text
@@ -56,7 +56,7 @@ def main():
     train_time_data = dm.pickle_load( "train_time_data.pickle" )
     update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
 
-    cookie = lib.netkeibaLogin()
+    cookie = lib.netkeiba_login()
     key_list = []
     url_list = []
 
@@ -65,7 +65,7 @@ def main():
         key_list.append( race_id )
         url_list.append( { "url": url, "cookie": cookie } )
 
-    add_data = lib.thread_scraping( url_list, key_list ).data_get( data_collect )
+    add_data = lib.ThreadScraping( url_list, key_list ).data_get( data_collect )
 
     for k in add_data.keys():
         train_time_data[k] = add_data[k]

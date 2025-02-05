@@ -22,7 +22,7 @@ def data_get( url ):
           class_name[0] == 'RacePace':
             try:
                 dd = dl.find( 'dd' )
-                result = lib.textReplace( dd.text )
+                result = lib.text_replace( dd.text )
                 break
             except:
                 continue
@@ -45,7 +45,7 @@ def main():
         url_data.append( url )
         key_data.append( race_id )
 
-    add_data = lib.thread_scraping( url_data, key_data ).data_get( data_get )
+    add_data = lib.ThreadScraping( url_data, key_data ).data_get( data_get )
 
     for race_id in add_data.keys():
         result[race_id] = add_data[race_id]

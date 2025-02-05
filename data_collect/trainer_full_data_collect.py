@@ -42,8 +42,8 @@ def data_collect( base_url, result ):
                     finish = True
                     break
                 
-                lib.dicAppend( result, key_day, {} )
-                lib.dicAppend( result[key_day], key_race_num, {} )
+                lib.dic_append( result, key_day, {} )
+                lib.dic_append( result[key_day], key_race_num, {} )
                 result[key_day][key_race_num]["place"] = td_tag[1].text
                 result[key_day][key_race_num]["weather"] = td_tag[2].text
                 result[key_day][key_race_num]["all_horce_num"] = td_tag[6].text
@@ -77,7 +77,7 @@ def main():
         url = base_url + trainer_id + "&page="
         url_list.append( url )
         key_list.append( trainer_id )
-        lib.dicAppend( result, trainer_id, {} )
+        lib.dic_append( result, trainer_id, {} )
         result[trainer_id] = data_collect( base_url, result[trainer_id] )
 
     dm.pickle_upload( "trainer_full_data.pickle", result )

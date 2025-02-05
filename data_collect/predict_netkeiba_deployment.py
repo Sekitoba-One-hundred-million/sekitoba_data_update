@@ -36,11 +36,11 @@ def data_get( url ):
                         result.append( copy.deepcopy( instance_list ) )
                         instance_list = []
 
-                    key = lib.textReplace( dt.text )
+                    key = lib.text_replace( dt.text )
                     continue
 
                 try:
-                    instance_list.append( int( lib.textReplace( li.find( "span" ).text ) ) )
+                    instance_list.append( int( lib.text_replace( li.find( "span" ).text ) ) )
                 except:
                     continue
                 
@@ -69,7 +69,7 @@ def main():
         url_data.append( url )
         key_data.append( race_id )
 
-    add_data = lib.thread_scraping( url_data, key_data ).data_get( data_get )
+    add_data = lib.ThreadScraping( url_data, key_data ).data_get( data_get )
 
     for race_id in add_data.keys():
         result[race_id] = add_data[race_id]

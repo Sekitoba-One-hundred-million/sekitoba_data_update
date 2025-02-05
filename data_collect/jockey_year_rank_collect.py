@@ -29,8 +29,8 @@ def data_collect( url ):
                     year = 0
 
                     try:
-                        year = int( lib.textReplace( td_tag[0].text ) )
-                        rank = int( lib.textReplace( td_tag[1].text ) )
+                        year = int( lib.text_replace( td_tag[0].text ) )
+                        rank = int( lib.text_replace( td_tag[1].text ) )
                     except:
                         continue
 
@@ -52,7 +52,7 @@ def main():
         url_list.append( url )
         key_list.append( jockey_id )
 
-    add_data = lib.thread_scraping( url_list, key_list ).data_get( data_collect )
+    add_data = lib.ThreadScraping( url_list, key_list ).data_get( data_collect )
 
     for jockey_id in add_data.keys():
         jockey_year_rank_data[jockey_id] = add_data[jockey_id]

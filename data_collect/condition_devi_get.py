@@ -25,7 +25,7 @@ def data_get( url ):
                 a_tag = td_tag[2].find( "a" )
                 horce_id = a_tag.get( "href" ).split( "&" )[0].split( "horse_id=" )[-1]
                 span_tag = td_tag[3].findAll( "span" )
-                condition_devi = float( lib.textReplace( span_tag[0].text ) )
+                condition_devi = float( lib.text_replace( span_tag[0].text ) )
                 result[horce_id] = condition_devi
             except:
                 continue
@@ -46,7 +46,7 @@ def main():
         url_data.append( url )
         key_data.append( race_id )
 
-    add_data = lib.thread_scraping( url_data, key_data ).data_get( data_get )
+    add_data = lib.ThreadScraping( url_data, key_data ).data_get( data_get )
 
     for k in add_data.keys():
         condition_devi_data[k] = add_data[k]

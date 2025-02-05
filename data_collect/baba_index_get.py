@@ -34,7 +34,7 @@ def data_collect( data ):
 
 def main():
     baba_index_data = dm.pickle_load( "baba_index_data.pickle" )
-    cookie = lib.netkeibaLogin()
+    cookie = lib.netkeiba_login()
     update_horce_id_list = dm.pickle_load( "update_horce_id_list.pickle" )
     url_list = []
 
@@ -42,7 +42,7 @@ def main():
         url = "https://db.netkeiba.com/horse/" + horce_id
         url_list.append( { "url": url, "cookie": cookie } )
 
-    add_data = lib.thread_scraping( url_list, update_horce_id_list ).data_get( data_collect )
+    add_data = lib.ThreadScraping( url_list, update_horce_id_list ).data_get( data_collect )
 
     for horce_id in add_data.keys():
         baba_index_data[horce_id] = add_data[horce_id]

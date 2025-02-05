@@ -28,7 +28,7 @@ def data_get( url ):
                 span_tag = div.findAll( "span" )
                 str_dist = span_tag[0].text.replace( " ", "" )
                 _, kind = lib.dist( str_dist )
-                dist = int( lib.kDist( str_dist ) * 1000 )
+                dist = int( lib.k_dist( str_dist ) * 1000 )
                 baba = lib.baba( span_tag[2].text.split( ":" )[1] )
                 result["kind"] = kind
                 result["dist"] = dist
@@ -36,7 +36,7 @@ def data_get( url ):
                 
             elif class_name[0] == "RaceData02":
                 span_tag = div.findAll( "span" )
-                place = lib.placeNum( span_tag[1].text )
+                place = lib.place_num( span_tag[1].text )
                 result["place"] = place
 
     return result
@@ -53,7 +53,7 @@ def main():
         url_list.append( "https://race.netkeiba.com/race/result.html?race_id=" + race_id )
         key_list.append( race_id )
 
-    add_data = lib.thread_scraping( url_list, key_list ).data_get( data_get )
+    add_data = lib.ThreadScraping( url_list, key_list ).data_get( data_get )
     rd = dm.pickle_load( "race_course_data.pickle" )
     
     for k in add_data.keys():

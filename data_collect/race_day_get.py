@@ -39,7 +39,7 @@ def main():
     race_data = ps.RaceData()
     removelist = []
 
-    add_data = lib.thread_scraping( update_race_id_list, update_race_id_list ).data_get( day_get )
+    add_data = lib.ThreadScraping( update_race_id_list, update_race_id_list ).data_get( day_get )
     
     for race_id in add_data.keys():
         race_day_data[race_id] = add_data[race_id]

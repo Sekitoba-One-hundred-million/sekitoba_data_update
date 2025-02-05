@@ -33,7 +33,7 @@ def first_time_get( soup ):
             except:
                 continue
 
-            lib.dicAppend( result, horce_num, {} )
+            lib.dic_append( result, horce_num, {} )
             ul_tag = dl.findAll( "ul" )
 
             for ul in ul_tag:
@@ -61,13 +61,13 @@ def main():
     result = dm.pickle_load( "first_up3_halon.pickle" )
     base_url = "https://race.netkeiba.com/race/newspaper.html?race_id="
     update_race_id_list = dm.pickle_load( "update_race_id_list.pickle" )
-    driver = lib.driverStart()
+    driver = lib.driver_start()
     driver = lib.login( driver )
     count = 0
 
     for race_id in update_race_id_list:
         url = base_url + race_id
-        driver, _ = lib.driverRequest( driver, url )
+        driver, _ = lib.driver_request( driver, url )
         print( race_id )
         time.sleep( 2 )
         html = driver.page_source.encode('utf-8')

@@ -58,7 +58,7 @@ def main():
         url_data.append( url )
         key_data.append( race_id )
 
-    add_data = lib.thread_scraping( url_data, key_data ).data_get( money_get )
+    add_data = lib.ThreadScraping( url_data, key_data ).data_get( money_get )
 
     for k in add_data.keys():
         odds_data[k] = add_data[k]

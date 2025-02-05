@@ -41,7 +41,7 @@ def horse_data_collect( url ):
                 
     return horce_data
     
-def parent_idGet( url ):
+def parent_id_get( url ):
     result = {}
     result["father"] = ""
     result["mother"] = ""
@@ -76,7 +76,7 @@ def main():
         url_list.append( "https://db.netkeiba.com/horse/" + horce_id )
         key_list.append( horce_id )
         
-    add_data = lib.thread_scraping( url_list, key_list ).data_get( parent_idGet )
+    add_data = lib.ThreadScraping( url_list, key_list ).data_get( parent_id_get )
 
     for horce_id in add_data.keys():
         parent_id_data[horce_id] = add_data[horce_id]
@@ -106,7 +106,7 @@ def main():
             except:
                 m_id = 0
                 
-    parent_data = lib.thread_scraping( url_list, key_list ).data_get( horse_data_collect )
+    parent_data = lib.ThreadScraping( url_list, key_list ).data_get( horse_data_collect )
     
     for horce_id in parent_data.keys():
         horce_data_storage[horce_id] = parent_data[horce_id]

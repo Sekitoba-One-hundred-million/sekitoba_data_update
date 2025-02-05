@@ -14,11 +14,11 @@ def is_biz_day( date ):
 
     return False
 
-def race_idGet( driver, url ):
+def race_id_get( driver, url ):
     race_id_list = []
     year = url.split( "kaisai_date=" )[-1][0:4]
-    #driver = lib.driverStart()
-    driver, _ = lib.driverRequest( driver, url )
+    #driver = lib.driver_start()
+    driver, _ = lib.driver_request( driver, url )
     time.sleep( 10 )
     html = driver.page_source.encode('utf-8')
     soup = BeautifulSoup( html, "html.parser" )
@@ -33,7 +33,7 @@ def race_idGet( driver, url ):
             try:
                 split_data = p.text.split( " " )
                 str_count = split_data[0].replace( "回", "" )
-                place_num = str( int( lib.placeNum( split_data[1] ) ) )
+                place_num = str( int( lib.place_num( split_data[1] ) ) )
                 str_day = split_data[2].replace( "日目", "" )
             except:
                 continue
@@ -49,7 +49,7 @@ def main():
     result = []
     race_data = ps.RaceData()
     all_race_id_list = race_data.get_all_race_id()
-    driver = lib.driverStart()
+    driver = lib.driver_start()
     today_date = datetime.datetime.now() - datetime.timedelta(1)
     day_count = 0
 
@@ -67,7 +67,7 @@ def main():
         
         for i in range( 0, 10 ):
             try:
-                race_id_list = race_idGet( driver, url )
+                race_id_list = race_id_get( driver, url )
                 break
             except Exception as e:
                 print( e )

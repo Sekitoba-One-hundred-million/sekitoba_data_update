@@ -31,7 +31,7 @@ def dist_get( soup ):
         if not class_name == None \
           and class_name[0] == "RaceData01":
             span = div.find( "span" )
-            dist = int( lib.kDist( span.text ) * 1000 )
+            dist = int( lib.k_dist( span.text ) * 1000 )
 
             if not dist == 0:
                 break
@@ -71,7 +71,7 @@ def main():
         url_data.append( url )
         key_data.append( race_id )
 
-    result.update( lib.thread_scraping( url_data, key_data ).data_get( data_get ) )    
+    result.update( lib.ThreadScraping( url_data, key_data ).data_get( data_get ) )    
     dm.pickle_upload( "race_time_data.pickle", result )
            
 main()

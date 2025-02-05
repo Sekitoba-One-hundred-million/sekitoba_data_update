@@ -48,7 +48,7 @@ def main():
         key_list.append( horce_id )
         url_list.append( url )
 
-    add_sex_data = lib.thread_scraping( url_list, key_list ).data_get( data_collect )
+    add_sex_data = lib.ThreadScraping( url_list, key_list ).data_get( data_collect )
 
     for horce_id in add_sex_data.keys():
         ps.HorceData().update_data( "sex", add_sex_data[horce_id], horce_id )

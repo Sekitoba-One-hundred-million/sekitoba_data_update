@@ -50,7 +50,7 @@ def main():
         url_data.append( url )
         key_data.append( race_id )
 
-    add_data = lib.thread_scraping( url_data, key_data ).data_get( race_money_get )
+    add_data = lib.ThreadScraping( url_data, key_data ).data_get( race_money_get )
 
     for race_id in add_data.keys():
         race_money_data[race_id] = add_data[race_id]

@@ -17,7 +17,7 @@ def main():
     param_list = [ "limb", "popular", "flame_num", "dist", "kind", "baba", "place", "limb_count", "escape_count" ]
 
     for k in race_data.keys():
-        race_id = lib.idGet( k )
+        race_id = lib.id_get( k )
         day = race_day[race_id]
         check_day = datetime.datetime( day["year"], day["month"], day["day"] )
         race_num = int( race_id[-2:] )
@@ -30,7 +30,7 @@ def main():
     
     for i, std in enumerate( sort_time_data ):
         k = std["k"]
-        race_id = lib.idGet( k )
+        race_id = lib.id_get( k )
         
         if race_id == "202306040508":
             break
@@ -62,16 +62,16 @@ def main():
         
         for kk in race_data[k].keys():
             horce_id = kk
-            current_data, past_data = lib.raceCheck( horce_data[horce_id],
+            current_data, past_data = lib.race_check( horce_data[horce_id],
                                                      year, day, num, race_place_num )#今回と過去のデータに分ける
             cd = lib.CurrentData( current_data )
             pd = lib.PastData( past_data, current_data )
 
-            if not cd.raceCheck():
+            if not cd.race_check():
                 continue
 
-            limb_math = int( lib.limbSearch( pd ) )
-            lib.dicAppend( limb_count_data, limb_math, 0 )
+            limb_math = int( lib.limb_search( pd ) )
+            lib.dic_append( limb_count_data, limb_math, 0 )
             limb_count_data[limb_math] += 1
             limb_dict[horce_id] = limb_math
 
@@ -80,12 +80,12 @@ def main():
 
         for kk in race_data[k].keys():
             horce_id = kk
-            current_data, past_data = lib.raceCheck( horce_data[horce_id],
+            current_data, past_data = lib.race_check( horce_data[horce_id],
                                                      year, day, num, race_place_num )#今回と過去のデータに分ける
             cd = lib.CurrentData( current_data )
             pd = lib.PastData( past_data, current_data )
 
-            if not cd.raceCheck():
+            if not cd.race_check():
                 continue
 
             if not horce_id in jockey_id_list:
@@ -94,17 +94,17 @@ def main():
             first_passing_rank = -1
 
             try:
-                first_passing_rank = int( cd.passingRank().split( "-" )[0] )
+                first_passing_rank = int( cd.passing_rank().split( "-" )[0] )
             except:
                 continue
 
             before_rank = -1
-            before_cd = pd.beforeCd()
+            before_cd = pd.before_cd()
 
             if not before_cd == None:
                 before_rank = before_cd.rank()
 
-            first_passing_class = min( int( first_passing_rank / int( cd.allHorceNum() / 3 ) ), 2 )
+            first_passing_class = min( int( first_passing_rank / int( cd.all_horce_num() / 3 ) ), 2 )
             key_first_passing_class = str( first_passing_class )
             jockey_id = jockey_id_list[horce_id]
             limb_math = limb_dict[horce_id]
@@ -112,10 +112,10 @@ def main():
             key_data = {}
             key_data["limb"] = str( int( limb_math ) )
             key_data["popular"] = str( int( cd.popular() ) )
-            key_data["flame_num"] = str( int( cd.flameNumber() ) )
-            key_data["dist"] = str( int( cd.distKind() ) )
-            key_data["kind"] = str( int( cd.raceKind() ) )
-            key_data["baba"] = str( int( cd.babaStatus() ) )
+            key_data["flame_num"] = str( int( cd.flame_number() ) )
+            key_data["dist"] = str( int( cd.dist_kind() ) )
+            key_data["kind"] = str( int( cd.race_kind() ) )
+            key_data["baba"] = str( int( cd.baba_status() ) )
             key_data["place"] = str( int( cd.place()) )
             key_data["limb_count"] = str( int( limb_count_data[limb_math] ) )
             key_data["escape_count"] = str( int( escape_count ) )
@@ -126,8 +126,8 @@ def main():
             dev_result[race_id][horce_id] = {}
             
             for param in param_list:
-                lib.dicAppend( jockey_judgment[jockey_id], param, {} )                
-                lib.dicAppend( jockey_judgment[jockey_id][param], key_data[param], { "0": 0, "1": 0, "2": 0, "count": 0 } )
+                lib.dic_append( jockey_judgment[jockey_id], param, {} )                
+                lib.dic_append( jockey_judgment[jockey_id][param], key_data[param], { "0": 0, "1": 0, "2": 0, "count": 0 } )
                 jockey_judgment[jockey_id][param][key_data[param]][key_first_passing_class] += 1
                 jockey_judgment[jockey_id][param][key_data[param]]["count"] += 1
                 

@@ -64,7 +64,7 @@ def main():
         url_list.append( url )
 
     update_jockey_id_data = {}
-    add_data = lib.thread_scraping( url_list, key_list ).data_get( data_collect )
+    add_data = lib.ThreadScraping( url_list, key_list ).data_get( data_collect )
 
     for k in add_data.keys():
         race_jockey_id_data[k] = copy.deepcopy( add_data[k] )

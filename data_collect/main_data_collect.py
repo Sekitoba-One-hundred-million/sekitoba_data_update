@@ -87,7 +87,7 @@ def main():
         url_list.append( url )
 
     update_horce_url = {}
-    add_race_data = lib.thread_scraping( url_list, url_list ).data_get( race_data_search )
+    add_race_data = lib.ThreadScraping( url_list, url_list ).data_get( race_data_search )
 
     for k in add_race_data.keys():
         if len( add_race_data[k] ) == 0:
@@ -106,7 +106,7 @@ def main():
         horce_url_list.append( update_horce_url[horce_id] )
 
     horce_data = dm.pickle_load( "horce_data_storage.pickle" )
-    add_horce_data = lib.thread_scraping( horce_url_list, horce_id_list ).data_get( horce_data_collect )
+    add_horce_data = lib.ThreadScraping( horce_url_list, horce_id_list ).data_get( horce_data_collect )
     psql_horce_data = ps.HorceData()
     
     for horce_id in add_horce_data.keys():

@@ -45,7 +45,7 @@ def main():
         url_list.append( url )
         key_list.append( race_id )
 
-    add_data = lib.thread_scraping( url_list, key_list ).data_get( wrap_get )
+    add_data = lib.ThreadScraping( url_list, key_list ).data_get( wrap_get )
         
     for race_id in add_data.keys():
         wrap_data[race_id] = add_data[race_id]
