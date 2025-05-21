@@ -18,8 +18,9 @@ def data_collect( url ):
         class_name = table.get( "class" )
 
         if not class_name == None \
-          and class_name[0] == "RaceCommon_Table" \
-          and class_name[1] == "Corner_Num":
+           and len( class_name ) > 1 \
+           and class_name[0] == "RaceCommon_Table" \
+           and class_name[1] == "Corner_Num":
             tr_tag = table.findAll( "tr" )
 
             for tr in tr_tag:

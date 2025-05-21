@@ -38,10 +38,10 @@ def race_id_get( driver, url ):
             except:
                 continue
 
-            base_id = year + lib.paddingStrMath( place_num ) + lib.paddingStrMath( str_count ) + lib.paddingStrMath( str_day )
+            base_id = year + lib.padding_str_math( place_num ) + lib.padding_str_math( str_count ) + lib.padding_str_math( str_day )
 
             for i in range( 1, 13 ):
-                race_id_list.append( base_id + lib.paddingStrMath( str( i ) ) )
+                race_id_list.append( base_id + lib.padding_str_math( str( i ) ) )
 
     return race_id_list
 
@@ -61,7 +61,7 @@ def main():
             continue
 
         print( check_date )
-        str_date = str( check_date.year ) + lib.paddingStrMath( str( check_date.month ) ) + lib.paddingStrMath( str( check_date.day ) )
+        str_date = str( check_date.year ) + lib.padding_str_math( str( check_date.month ) ) + lib.padding_str_math( str( check_date.day ) )
         url = "https://race.netkeiba.com/top/?kaisai_date={}".format( str_date )
         race_id_list = []
         
