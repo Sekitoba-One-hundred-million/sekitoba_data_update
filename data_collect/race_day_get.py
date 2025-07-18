@@ -51,4 +51,3 @@ def main():
     dm.pickle_upload( "update_race_id_list.pickle", update_race_id_list )
     
 main()
-    

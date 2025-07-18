@@ -1,6 +1,6 @@
 target_race_id_collect.py
-data_collect/race_day_get.py
 data_collect/main_data_collect.py
+data_collect/race_day_get.py
 data_collect/jockey_id_collect.py
 data_collect/trainer_id_collect.py
 data_collect/race_info_collect.py
@@ -20,6 +20,7 @@ data_collect/time_index_get.py
 data_collect/predict_netkeiba_deployment.py
 data_collect/predict_netkeiba_pace.py
 data_collect/wide_odds_collect.py
+data_collect/horce_blood_collect.py
 use_data/flame_evaluation.py
 use_data/up_kind_ave.py
 use_data/up3_analyze.py
@@ -50,3 +51,5 @@ use_data/dist_index.py
 use_data/standard_time.py
 use_data/up3_standard_time.py
 use_data/before_pace_ave.py
+use_data/blood_type_analyze.py
+use_data/run_circle_dist.py
